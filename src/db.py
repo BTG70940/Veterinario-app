@@ -31,3 +31,23 @@ def criar_tabelas():
         ligacao.commit()
     finally:
         ligacao.close()
+
+
+def executar(sql, parametros=()):
+    """Executa INSERT, UPDATE ou DELETE. Devolve o id da última linha inserida."""
+    ligacao = ligar()
+    try:
+        cursor = ligacao.execute(sql, parametros)
+        ligacao.commit()
+        return cursor.lastrowid
+    finally:
+        ligacao.close()
+
+
+def consultar(sql, parametros=()):
+    """Executa um SELECT e devolve todas as linhas."""
+    ligacao = ligar()
+    try:
+        return ligacao.execute(sql, parametros).fetchall()
+    finally:
+        ligacao.close()
