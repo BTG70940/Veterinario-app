@@ -10,7 +10,8 @@ App feita em Python para a  gestão de uma clínica veterinária (donos, animais
 - (Lourenco Romão)
 
 ## Como executar
-(a preencher)
+Requer Python 3.10 ou superior.
+Na raiz do projeto: python src/main.py
 
 ## Estrutura
 (a preencher)
