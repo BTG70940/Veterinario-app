@@ -27,3 +27,22 @@ def listar_donos():
         return
     for dono in donos:
         print(f"[{dono['id']}] {dono['nome']} | {dono['telefone']} | {dono['email']}")
+
+
+def menu_donos():
+    """Submenu de gestão de donos."""
+    while True:
+        print("\n--- Donos ---")
+        print("1. Registar dono")
+        print("2. Listar donos")
+        print("0. Voltar")
+        opcao = input("Escolhe uma opção: ").strip()
+
+        if opcao == "1":
+            adicionar_dono()
+        elif opcao == "2":
+            listar_donos()
+        elif opcao == "0":
+            break
+        else:
+            print("Opção inválida.")
