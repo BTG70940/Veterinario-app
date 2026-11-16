@@ -17,3 +17,13 @@ def adicionar_dono():
         (nome, telefone, email, morada),
     )
     print(f"Dono registado com o id {id_dono}.")
+
+
+def listar_donos():
+    """Mostra todos os donos registados."""
+    donos = db.consultar("SELECT id, nome, telefone, email FROM donos ORDER BY nome")
+    if not donos:
+        print("Ainda não há donos registados.")
+        return
+    for dono in donos:
+        print(f"[{dono['id']}] {dono['nome']} | {dono['telefone']} | {dono['email']}")
