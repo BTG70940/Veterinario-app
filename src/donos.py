@@ -1,33 +1,39 @@
 """Gestão dos donos dos animais."""
+import sqlite3
+
 import db
 
 
 def adicionar_dono():
     """Pede os dados ao utilizador e guarda um novo dono."""
     nome = input("Nome: ").strip()
-    if not nome:
-        print("O nome é obrigatório.")
+    contacto = input("Contacto: ").strip()
+    if not nome or not contacto:
+        print("O nome e o contacto são obrigatórios.")
         return
-    telefone = input("Telefone: ").strip()
-    email = input("Email: ").strip()
-    morada = input("Morada: ").strip()
+    email = input("Email (opcional): ").strip() or None
+    morada = input("Morada (opcional): ").strip() or None
 
-    id_dono = db.executar(
-        "INSERT INTO donos (nome, telefone, email, morada) VALUES (?, ?, ?, ?)",
-        (nome, telefone, email, morada),
-    )
+    try:
+        id_dono = db.executar(
+            "INSERT INTO donos (nome, contacto, email, morada) VALUES (?, ?, ?, ?)",
+            (nome, contacto, email, morada),
+        )
+    except sqlite3.IntegrityError:
+        print("Já existe um dono com esse nome e contacto.")
+        return
     print(f"Dono registado com o id {id_dono}.")
     return id_dono
 
 
 def listar_donos():
     """Mostra todos os donos registados."""
-    donos = db.consultar("SELECT id, nome, telefone, email FROM donos ORDER BY nome")
+    donos = db.consultar("SELECT id, nome, contacto, email FROM donos ORDER BY nome")
     if not donos:
         print("Ainda não há donos registados.")
         return
     for dono in donos:
-        print(f"[{dono['id']}] {dono['nome']} | {dono['telefone']} | {dono['email']}")
+        print(f"[{dono['id']}] {dono['nome']} | {dono['contacto']} | {dono['email'] or '—'}")
 
 
 def menu_donos():

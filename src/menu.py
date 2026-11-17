@@ -3,6 +3,7 @@ import donos
 import animais
 from historicos import menu
 
+
 def menu_principal():
     """Mostra o menu principal e encaminha para cada área."""
     while True:
@@ -16,7 +17,7 @@ def menu_principal():
         opcao = input("Escolhe uma opção: ").strip()
 
         if opcao == "1":
-            donos.menu_donos() # story 2
+            donos.menu_donos()  # story 2
         elif opcao == "2":
             animais.menu()  # stories 3, 5, 6
         elif opcao == "3":
