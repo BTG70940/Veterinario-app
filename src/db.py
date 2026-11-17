@@ -65,3 +65,28 @@ def consultar(sql, parametros=()):
         return ligacao.execute(sql, parametros).fetchall()
     finally:
         ligacao.close()
+
+def utilizador_existe(nome):
+    conn = ligar()
+    try:
+        cursor = conn.cursor()
+        cursor.execute(
+            "SELECT 1 FROM donos WHERE nome = ? LIMIT 1",
+            (nome,),
+        )
+        return cursor.fetchone() is not None
+    finally:
+        conn.close()
+
+def obter_id_dono(nome):
+    conn = sqlite3.connect(CAMINHO_BD)
+    try:
+        cursor = conn.cursor()
+        cursor.execute(
+            "SELECT id FROM donos WHERE nome = ? LIMIT 1",
+            (nome,),
+        )
+        linha = cursor.fetchone()
+        return linha[0] if linha else None
+    finally:
+        conn.close()

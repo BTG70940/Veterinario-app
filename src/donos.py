@@ -17,6 +17,7 @@ def adicionar_dono():
         (nome, telefone, email, morada),
     )
     print(f"Dono registado com o id {id_dono}.")
+    return id_dono
 
 
 def listar_donos():
