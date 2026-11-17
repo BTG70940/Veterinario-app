@@ -1,5 +1,5 @@
 """Menu principal da aplicação."""
-
+import donos
 
 def menu_principal():
     """Mostra o menu principal e encaminha para cada área."""
@@ -14,7 +14,7 @@ def menu_principal():
         opcao = input("Escolhe uma opção: ").strip()
 
         if opcao == "1":
-            print("Em construção...")  # story 2
+            donos.menu_donos() # story 2
         elif opcao == "2":
             print("Em construção...")  # stories 3, 5, 6
         elif opcao == "3":
