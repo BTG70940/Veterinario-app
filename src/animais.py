@@ -1,8 +1,11 @@
 
 import json
 import os
+import re
 import sqlite3
+import unicodedata
 from datetime import date, datetime
+from xml.sax.saxutils import escape
  
 BASE_DADOS = "veterinario.db"
 FICHEIRO_JSON = "animais.json"  # usado apenas para importar dados antigos
@@ -194,6 +197,14 @@ def escolher_animal(conn):
     return None
  
  
+def obter_consultas(conn, animal_id):
+    """Todas as consultas de um animal, da mais recente para a mais antiga."""
+    return conn.execute(
+        "SELECT * FROM consultas WHERE animal_id = ? ORDER BY data DESC, id DESC",
+        (animal_id,),
+    ).fetchall()
+ 
+ 
 # ---------- Funcionalidades ----------
  
 def registar_animal(conn):
@@ -275,10 +286,7 @@ def consultar_situacao(conn):
     if not a:
         return
  
-    consultas = conn.execute(
-        "SELECT * FROM consultas WHERE animal_id = ? ORDER BY data DESC, id DESC",
-        (a["id"],),
-    ).fetchall()
+    consultas = obter_consultas(conn, a["id"])
  
     peso = f"{a['peso_kg']} kg" if a["peso_kg"] else "—"
     print(f"\n=== {a['nome']} (ID {a['id']}) ===")
@@ -305,4 +313,173 @@ def consultar_situacao(conn):
         print(f"  ... e mais {len(consultas) - 5} anterior(es).")
  
  
-
+def nome_ficheiro_seguro(texto):
+    """'João Pedro' -> 'Joao_Pedro' (sem acentos nem caracteres problemáticos)."""
+    sem_acentos = unicodedata.normalize("NFKD", texto).encode("ascii", "ignore").decode()
+    return re.sub(r"[^A-Za-z0-9_-]+", "_", sem_acentos).strip("_") or "animal"
+ 
+ 
+def exportar_pdf(conn):
+    """Gera um PDF com a ficha completa do animal e o historial de consultas."""
+    print("\n--- Exportar ficha em PDF ---")
+    try:
+        from reportlab.lib import colors
+        from reportlab.lib.pagesizes import A4
+        from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
+        from reportlab.lib.units import cm
+        from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
+    except ImportError:
+        print("Falta a biblioteca reportlab. Instala com: pip install reportlab")
+        return
+ 
+    a = escolher_animal(conn)
+    if not a:
+        return
+    consultas = obter_consultas(conn, a["id"])
+ 
+    def texto(valor):
+        """Texto seguro para Paragraph: escapa <, > e & e preserva quebras de linha."""
+        return escape(str(valor)).replace("\n", "<br/>") if valor else "—"
+ 
+    cor_principal = colors.HexColor("#1F4E5F")
+    estilos = getSampleStyleSheet()
+    estilo_titulo = ParagraphStyle("Titulo", parent=estilos["Title"], textColor=cor_principal,
+                                   alignment=0, fontSize=22, spaceAfter=2)
+    estilo_sub = ParagraphStyle("Sub", parent=estilos["Normal"], textColor=colors.grey, fontSize=10)
+    estilo_sec = ParagraphStyle("Sec", parent=estilos["Heading2"], textColor=cor_principal,
+                                spaceBefore=14, spaceAfter=6)
+    estilo_cel = ParagraphStyle("Cel", parent=estilos["Normal"], fontSize=9, leading=12)
+    estilo_rotulo = ParagraphStyle("Rotulo", parent=estilo_cel, fontName="Helvetica-Bold",
+                                   textColor=cor_principal)
+    estilo_cab = ParagraphStyle("Cab", parent=estilo_cel, fontName="Helvetica-Bold",
+                                textColor=colors.white)
+ 
+    peso = f"{a['peso_kg']} kg" if a["peso_kg"] else None
+    dados = [
+        ("Nome", a["nome"]),
+        ("Espécie", a["especie"]),
+        ("Raça", a["raca"]),
+        ("Sexo", a["sexo"]),
+        ("Data de nascimento", formatar_data(a["data_nascimento"]) if a["data_nascimento"] else None),
+        ("Idade", calcular_idade(a["data_nascimento"]) if a["data_nascimento"] else None),
+        ("Peso atual", peso),
+        ("Dono", a["dono_nome"]),
+        ("Contacto do dono", a["dono_contacto"]),
+        ("Inscrito em", formatar_data(a["data_inscricao"])),
+    ]
+    tabela_dados = Table(
+        [[Paragraph(r, estilo_rotulo), Paragraph(texto(v), estilo_cel)] for r, v in dados],
+        colWidths=[4.5 * cm, 12.5 * cm],
+    )
+    tabela_dados.setStyle(TableStyle([
+        ("ROWBACKGROUNDS", (0, 0), (-1, -1), [colors.whitesmoke, colors.white]),
+        ("LINEBELOW", (0, 0), (-1, -1), 0.25, colors.lightgrey),
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ("TOPPADDING", (0, 0), (-1, -1), 5),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
+    ]))
+ 
+    story = [
+        Paragraph("Ficha do Animal", estilo_titulo),
+        Paragraph(f"{texto(a['nome'])} · ID {a['id']}", estilo_sub),
+        Spacer(1, 10),
+        Paragraph("Dados gerais", estilo_sec),
+        tabela_dados,
+        Paragraph("Notas gerais", estilo_sec),
+        Paragraph(texto(a["notas"]), estilo_cel),
+        Paragraph(f"Historial de consultas ({len(consultas)})", estilo_sec),
+    ]
+ 
+    if consultas:
+        linhas = [[Paragraph(c, estilo_cab) for c in
+                   ("Data", "Motivo", "Diagnóstico", "Tratamento", "Peso")]]
+        for c in consultas:
+            linhas.append([
+                Paragraph(formatar_data(c["data"]), estilo_cel),
+                Paragraph(texto(c["motivo"]), estilo_cel),
+                Paragraph(texto(c["diagnostico"]), estilo_cel),
+                Paragraph(texto(c["tratamento"]), estilo_cel),
+                Paragraph(f"{c['peso_kg']} kg" if c["peso_kg"] else "—", estilo_cel),
+            ])
+        tabela_consultas = Table(
+            linhas,
+            colWidths=[2.3 * cm, 4.0 * cm, 4.5 * cm, 4.5 * cm, 1.7 * cm],
+            repeatRows=1,  # repete o cabeçalho se a tabela passar para outra página
+        )
+        tabela_consultas.setStyle(TableStyle([
+            ("BACKGROUND", (0, 0), (-1, 0), cor_principal),
+            ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, colors.whitesmoke]),
+            ("GRID", (0, 0), (-1, -1), 0.25, colors.lightgrey),
+            ("VALIGN", (0, 0), (-1, -1), "TOP"),
+            ("TOPPADDING", (0, 0), (-1, -1), 4),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+        ]))
+        story.append(tabela_consultas)
+    else:
+        story.append(Paragraph("Ainda sem consultas registadas.", estilo_cel))
+ 
+    def rodape(canvas, doc):
+        canvas.saveState()
+        canvas.setFont("Helvetica", 8)
+        canvas.setFillColor(colors.grey)
+        canvas.drawString(2 * cm, 1.2 * cm,
+                          f"Clínica Veterinária · gerado em {date.today().strftime('%d-%m-%Y')}")
+        canvas.drawRightString(A4[0] - 2 * cm, 1.2 * cm, f"Página {doc.page}")
+        canvas.restoreState()
+ 
+    ficheiro = f"ficha_{nome_ficheiro_seguro(a['nome'])}_{a['id']}.pdf"
+    doc = SimpleDocTemplate(
+        ficheiro, pagesize=A4,
+        leftMargin=2 * cm, rightMargin=2 * cm, topMargin=2 * cm, bottomMargin=2 * cm,
+        title=f"Ficha de {a['nome']}", author="Clínica Veterinária",
+    )
+    try:
+        doc.build(story, onFirstPage=rodape, onLaterPages=rodape)
+    except OSError as erro:  # por exemplo, o PDF já está aberto noutro programa
+        print(f"Não foi possível gravar o PDF: {erro}")
+        return
+    print(f"PDF criado: {os.path.abspath(ficheiro)}")
+ 
+ 
+# ---------- Menu ----------
+ 
+def menu():
+    conn = ligar()
+    criar_tabelas(conn)
+    importar_json(conn)
+    try:
+        while True:
+            print("\n===== Clínica Veterinária =====")
+            print("1. Registar animal")
+            print("2. Listar animais")
+            print("3. Pesquisar")
+            print("4. Registar consulta")
+            print("5. Consultar situação atual de um animal")
+            print("6. Exportar ficha de um animal em PDF")
+            print("0. Sair")
+            opcao = input("Opção: ").strip()
+ 
+            if opcao == "1":
+                registar_animal(conn)
+            elif opcao == "2":
+                listar_animais(conn)
+            elif opcao == "3":
+                pesquisar_animais(conn)
+            elif opcao == "4":
+                registar_consulta(conn)
+            elif opcao == "5":
+                consultar_situacao(conn)
+            elif opcao == "6":
+                exportar_pdf(conn)
+            elif opcao == "0":
+                print("Até logo!")
+                break
+            else:
+                print("Opção inválida.")
+    finally:
+        conn.close()
+ 
+ 
+if __name__ == "__main__":
+    menu()
+ 

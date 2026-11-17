@@ -17,7 +17,7 @@ def menu_principal():
         if opcao == "1":
             donos.menu_donos() # story 2
         elif opcao == "2":
-            print("Em construção...")  # stories 3, 5, 6
+            animais.meunu()  # stories 3, 5, 6
         elif opcao == "3":
             print("Em construção...")  # story 9
         elif opcao == "4":
