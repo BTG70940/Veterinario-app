@@ -1,5 +1,6 @@
 """Menu principal da aplicação."""
 import donos
+import animais
 
 def menu_principal():
     """Mostra o menu principal e encaminha para cada área."""
