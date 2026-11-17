@@ -440,12 +440,20 @@ def exportar_pdf(conn):
         return
     print(f"PDF criado: {os.path.abspath(ficheiro)}")
  
- 
+
+def atualizar_esquema(conn):
+    """Acrescenta colunas que faltem em bases de dados criadas por versões antigas."""
+    colunas = {linha["name"] for linha in conn.execute("PRAGMA table_info(donos)")}
+    if "contacto" not in colunas:
+        with conn:
+            conn.execute("ALTER TABLE donos ADD COLUMN contacto TEXT NOT NULL DEFAULT ''")
+
 # ---------- Menu ----------
  
 def menu():
     conn = ligar()
     criar_tabelas(conn)
+    atualizar_esquema(conn)
     importar_json(conn)
     try:
         while True:
