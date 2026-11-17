@@ -1,4 +1,5 @@
 import sqlite3
+from db import CAMINHO_BD
 
 def obter_medicamentos_por_animal(caminho_bd, animal_id):
     """
@@ -27,3 +28,15 @@ def obter_medicamentos_por_animal(caminho_bd, animal_id):
         return [dict(linha) for linha in cursor.fetchall()]
     finally:
         conn.close()
+
+def mostrar_medicamentos():
+    medicamentos = obter_medicamentos_por_animal(CAMINHO_BD, 1)
+
+    print("==================================================")
+
+    if len(medicamentos) < 1:
+        print("Não tem animais a tomar medicação")
+    else:
+        print(medicamentos)
+        
+    print("==================================================")

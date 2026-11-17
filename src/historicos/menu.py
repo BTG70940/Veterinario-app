@@ -1,5 +1,4 @@
-from .historicoMedicamentos import obter_medicamentos_por_animal
-from db import CAMINHO_BD
+from .historicoMedicamentos import mostrar_medicamentos
 
 def menu_medicamentos():
     while True:
@@ -10,8 +9,12 @@ def menu_medicamentos():
         escolha = input("Escolha uma opção: ").strip()
 
         if escolha == "1":
-            obter_medicamentos_por_animal()
-            
+
+            # aqui deve ser colocao o id do animal do dono logado
+            # por enquanto vai usar o id 1 sempre
+
+            mostrar_medicamentos()
+
         elif escolha == "0":
             print("A voltar...")
             break
