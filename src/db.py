@@ -36,6 +36,28 @@ def criar_tabelas():
     try:
         ligacao.execute(
             """
+            CREATE TABLE IF NOT EXISTS animais (
+                id               INTEGER PRIMARY KEY AUTOINCREMENT,
+                nome             TEXT NOT NULL,
+                especie          TEXT NOT NULL,
+                raca             TEXT,
+                data_nascimento  TEXT,
+                sexo             TEXT,
+                peso_kg          REAL CHECK (peso_kg IS NULL OR peso_kg > 0),
+                dono_id          INTEGER NOT NULL REFERENCES donos(id),
+                notas            TEXT,
+                data_inscricao   TEXT NOT NULL
+            );
+            """
+        )
+        ligacao.commit()
+    finally:
+        ligacao.close()
+
+    ligacao = ligar()
+    try:
+        ligacao.execute(
+            """
             CREATE TABLE IF NOT EXISTS medicamentos (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 nome_medicamento TEXT NOT NULL,
@@ -47,6 +69,8 @@ def criar_tabelas():
         ligacao.commit()
     finally:
         ligacao.close()
+
+    
 def executar(sql, parametros=()):
     """Executa INSERT, UPDATE ou DELETE. Devolve o id da última linha inserida."""
     ligacao = ligar()
