@@ -1,6 +1,7 @@
 """Menu principal da aplicação."""
 import donos
 import animais
+from historicos import menu
 
 def menu_principal():
     """Mostra o menu principal e encaminha para cada área."""
@@ -21,7 +22,7 @@ def menu_principal():
         elif opcao == "3":
             print("Em construção...")  # story 9
         elif opcao == "4":
-            print("Em construção...")  # stories 10, 11
+            menu.menu_medicamentos()  # stories 10, 11
         elif opcao == "5":
             print("Em construção...")  # stories 8, 14
         elif opcao == "0":

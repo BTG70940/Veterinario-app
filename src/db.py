@@ -40,7 +40,7 @@ def criar_tabelas():
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 nome_medicamento TEXT NOT NULL,
                 quantidade INTEGER,
-                id_animal INETEGER,
+                id_animal INETEGER
             )
             """
         )
