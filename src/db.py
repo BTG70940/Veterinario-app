@@ -22,9 +22,10 @@ def criar_tabelas():
             CREATE TABLE IF NOT EXISTS donos (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 nome TEXT NOT NULL,
-                telefone TEXT,
+                contacto TEXT NOT NULL,
                 email TEXT,
-                morada TEXT
+                morada TEXT,
+                UNIQUE (nome, contacto)
             )
             """
         )
