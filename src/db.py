@@ -32,7 +32,21 @@ def criar_tabelas():
     finally:
         ligacao.close()
 
-
+    ligacao = ligar()
+    try:
+        ligacao.execute(
+            """
+            CREATE TABLE IF NOT EXISTS medicamentos (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                nome_medicamento TEXT NOT NULL,
+                quantidade INTEGER,
+                id_animal INETEGER,
+            )
+            """
+        )
+        ligacao.commit()
+    finally:
+        ligacao.close()
 def executar(sql, parametros=()):
     """Executa INSERT, UPDATE ou DELETE. Devolve o id da última linha inserida."""
     ligacao = ligar()
