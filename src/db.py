@@ -168,9 +168,16 @@ def obter_medicamentos_por_animal(animal_id):
 
         cursor.execute(
             f"""
-            SELECT id, nome_medicamento, quantidade, id_animal
-            FROM medicamentos
-            WHERE id_animal IN ({placeholders})
+            SELECT
+                m.id,
+                m.nome_medicamento,
+                m.quantidade,
+                m.id_animal,
+                a.nome AS nome_animal
+            FROM medicamentos m
+            INNER JOIN animais a ON m.id_animal = a.id
+            WHERE m.id_animal IN ({placeholders})
+            ORDER BY a.nome, m.nome_medicamento
             """,
             tuple(animal_id)
         )

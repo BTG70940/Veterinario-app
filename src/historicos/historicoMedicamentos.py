@@ -10,11 +10,31 @@ def mostrar_medicamentos(USER_LOGADO):
 
     medicamentos = obter_medicamentos_por_animal(animal_id)
 
-    print("==================================================")
+    print("\n" + "=" * 45)
+    print("          MEDICAMENTOS DOS ANIMAIS")
+    print("=" * 45)
 
-    if len(medicamentos) < 1:
-        print("Não tem animais a tomar medicação")
+    if not medicamentos:
+        print("\n  Não tem animais a tomar medicação.")
     else:
-        print(medicamentos)
-        
-    print("==================================================")
+        # Agrupar medicamentos por animal
+        medicamentos_por_animal = {}
+
+        for med in medicamentos:
+            id_animal = med["id_animal"]
+
+            if id_animal not in medicamentos_por_animal:
+                medicamentos_por_animal[id_animal] = []
+
+            medicamentos_por_animal[id_animal].append(med)
+
+        for id_animal, lista in medicamentos_por_animal.items():
+            print(f"\n  MEDICAÇÃO DO ANIMAL: {lista[0]['nome_animal']}")
+            print("  " + "-" * 35)
+
+            for med in lista:
+                print(f"  Medicamento : {med['nome_medicamento']}")
+                print(f"  Quantidade  : {med['quantidade']}")
+                print()
+
+    print("=" * 45)
