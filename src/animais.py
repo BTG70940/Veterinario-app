@@ -337,27 +337,56 @@ def registar_doenca(conn, consulta_id):
     print("Doença registada com sucesso.")
 
 
+
 def registar_consulta(conn):
     print("\n--- Nova consulta ---")
+
     animal = escolher_animal(conn)
     if not animal:
         return
+
     print(f"Animal: {animal['nome']} ({animal['especie']})")
+
     motivo = pedir_texto("Motivo da consulta: ")
     diagnostico = pedir_texto("Diagnóstico: ", obrigatorio=False) or None
     tratamento = pedir_texto("Tratamento: ", obrigatorio=False) or None
     peso = pedir_peso("Peso atual em kg (vazio para não alterar): ")
- 
+
     with conn:
-        conn.execute(
-            """INSERT INTO consultas
-               (animal_id, data, motivo, diagnostico, tratamento, peso_kg)
-               VALUES (?, ?, ?, ?, ?, ?)""",
-            (animal["id"], date.today().isoformat(), motivo, diagnostico, tratamento, peso),
+        cursor = conn.execute(
+            """
+            INSERT INTO consultas
+                (animal_id, data, motivo, diagnostico, tratamento, peso_kg)
+            VALUES (?, ?, ?, ?, ?, ?)
+            """,
+            (
+                animal["id"],
+                date.today().isoformat(),
+                motivo,
+                diagnostico,
+                tratamento,
+                peso
+            )
         )
-        if peso:  # mantém o peso atual do animal em dia
-            conn.execute("UPDATE animais SET peso_kg = ? WHERE id = ?", (peso, animal["id"]))
-    print("Consulta registada.")
+
+        consulta_id = cursor.lastrowid
+
+        if peso:
+            conn.execute(
+                "UPDATE animais SET peso_kg = ? WHERE id = ?",
+                (peso, animal["id"])
+            )
+
+        # Verificar se foi identificada alguma doença
+        resposta = input(
+            "\nFoi identificada alguma doença? (s/n): "
+        ).strip().lower()
+
+        if resposta == "s":
+            registar_doenca(conn, consulta_id)
+
+    print("\nConsulta registada com sucesso.")
+
 
 
 def registar_vacina(conn):
