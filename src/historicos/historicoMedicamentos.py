@@ -18,6 +18,9 @@ def obter_medicamentos_por_animal(caminho_bd, animal_id):
     if not animal_id:
         return []
 
+    if isinstance(animal_id, int):
+        animal_id = [animal_id]
+
     # Remove IDs None da lista
     animal_id = [id for id in animal_id if id is not None]
 

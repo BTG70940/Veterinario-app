@@ -9,10 +9,6 @@ def menu_historicos(USER_LOGADO):
         escolha = input("Escolha uma opção: ").strip()
 
         if escolha == "1":
-
-            # aqui deve ser colocao o id do animal do dono logado
-            # por enquanto vai usar o id 1 sempre
-
             mostrar_medicamentos(USER_LOGADO)
 
         elif escolha == "0":
