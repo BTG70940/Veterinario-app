@@ -63,6 +63,12 @@ def criar_tabelas(conn):
                 lote               TEXT,
                 notas              TEXT
             );
+            CREATE TABLE IF NOT EXISTS doencas (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                nome TEXT NOT NULL,
+                descricao TEXT,
+                consulta_id INTEGER NOT NULL REFERENCES consultas(id)
+            );
         """)
  
  

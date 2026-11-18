@@ -71,6 +71,22 @@ def criar_tabelas():
     finally:
         ligacao.close()
 
+        ligacao = ligar()
+    try:
+        ligacao.execute(
+            """
+            CREATE TABLE IF NOT EXISTS doencas (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                nome TEXT NOT NULL,
+                descricao TEXT,
+                consulta_id INTEGER NOT NULL REFERENCES consultas(id)
+            );
+            """
+        )
+        ligacao.commit()
+    finally:
+        ligacao.close()
+
     
 def executar(sql, parametros=()):
     """Executa INSERT, UPDATE ou DELETE. Devolve o id da última linha inserida."""
