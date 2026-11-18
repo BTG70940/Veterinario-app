@@ -1,4 +1,4 @@
-from .historicoMedicamentos import mostrar_medicamentos
+from .historicos import mostrar_medicamentos
 
 def menu_historicos(USER_LOGADO):
     while True:
