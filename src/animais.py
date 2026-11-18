@@ -317,6 +317,26 @@ def pesquisar_animais(conn):
         print(f"[{a['id']}] {a['nome']} - {a['especie']} - dono: {a['dono_nome']}")
  
  
+
+def registar_doenca(conn, consulta_id):
+    """Regista uma doença associada a uma consulta."""
+
+    print("\n--- Registar doença ---")
+
+    nome = pedir_texto("Nome da doença: ")
+    descricao = pedir_texto("Descrição da doença: ", obrigatorio=False) or None
+
+    conn.execute(
+        """
+        INSERT INTO doencas (nome, descricao, consulta_id)
+        VALUES (?, ?, ?)
+        """,
+        (nome, descricao, consulta_id)
+    )
+
+    print("Doença registada com sucesso.")
+
+
 def registar_consulta(conn):
     print("\n--- Nova consulta ---")
     animal = escolher_animal(conn)
