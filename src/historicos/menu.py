@@ -1,6 +1,6 @@
 from .historicoMedicamentos import mostrar_medicamentos
 
-def menu_medicamentos():
+def menu_historicos(USER_LOGADO):
     while True:
         print("\n=== Menu de Historicos ===")
         print("1. Medicamentos")
@@ -13,7 +13,7 @@ def menu_medicamentos():
             # aqui deve ser colocao o id do animal do dono logado
             # por enquanto vai usar o id 1 sempre
 
-            mostrar_medicamentos()
+            mostrar_medicamentos(USER_LOGADO)
 
         elif escolha == "0":
             print("A voltar...")

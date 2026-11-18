@@ -4,7 +4,7 @@ import animais
 from historicos import menu
 
 
-def menu_principal():
+def menu_principal(USER_LOGADO):
     """Mostra o menu principal e encaminha para cada área."""
     while True:
         print("\n=== Clínica Veterinária ===")
@@ -23,7 +23,7 @@ def menu_principal():
         elif opcao == "3":
             print("Em construção...")  # story 9
         elif opcao == "4":
-            menu.menu_medicamentos()  # stories 10, 11
+            menu.menu_historicos(USER_LOGADO)  # stories 10, 11
         elif opcao == "5":
             print("Em construção...")  # stories 8, 14
         elif opcao == "0":

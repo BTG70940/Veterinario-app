@@ -115,3 +115,19 @@ def obter_id_dono(nome):
         return linha[0] if linha else None
     finally:
         conn.close()
+
+
+def obter_id_animais_por_dono(dono):
+    conn = sqlite3.connect(CAMINHO_BD)
+    try:
+        cursor = conn.cursor()
+        cursor.execute(
+            "SELECT id FROM animais WHERE dono_id = ?",
+            (dono,)
+        )
+        linha = cursor.fetchall()
+        
+        return [row[0] for row in linha] if linha else []
+        
+    finally:
+        conn.close()
