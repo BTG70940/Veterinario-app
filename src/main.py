@@ -31,7 +31,7 @@ def menu_autenticacao():
             User_logado = adicionar_dono()
             break
         elif escolha == "0":
-            break
+            exit()
         else:
             print("Opção inválida. Tenta novamente.")
 
