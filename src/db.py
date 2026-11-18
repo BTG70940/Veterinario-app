@@ -237,3 +237,58 @@ def obter_animais_a_tomar_medicacao(dono_id):
 
     finally:
         conn.close()
+
+def obter_doencas_por_animal(animal_id):
+    """
+    Devolve todas as doenças associadas aos animais indicados.
+
+    Retorna:
+        list[dict]: lista de doenças com os campos
+                    id, nome, descricao, consulta_id,
+                    id_animal, nome_animal e data.
+    """
+
+    if not animal_id:
+        return []
+
+    if isinstance(animal_id, int):
+        animal_id = [animal_id]
+
+    animal_id = list(dict.fromkeys(
+        id for id in animal_id if id is not None
+    ))
+
+    if not animal_id:
+        return []
+
+    conn = sqlite3.connect(CAMINHO_BD)
+
+    try:
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
+
+        placeholders = ",".join("?" for _ in animal_id)
+
+        cursor.execute(
+            f"""
+            SELECT
+                d.id,
+                d.nome,
+                d.descricao,
+                d.consulta_id,
+                c.animal_id AS id_animal,
+                a.nome AS nome_animal,
+                c.data
+            FROM doencas d
+            JOIN consultas c ON d.consulta_id = c.id
+            JOIN animais a ON c.animal_id = a.id
+            WHERE c.animal_id IN ({placeholders})
+            ORDER BY a.nome, c.data DESC
+            """,
+            tuple(animal_id)
+        )
+
+        return [dict(linha) for linha in cursor.fetchall()]
+
+    finally:
+        conn.close()
