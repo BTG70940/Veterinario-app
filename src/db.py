@@ -126,8 +126,56 @@ def obter_id_animais_por_dono(dono):
             (dono,)
         )
         linha = cursor.fetchall()
-        
+
         return [row[0] for row in linha] if linha else []
         
+    finally:
+        conn.close()
+
+def obter_medicamentos_por_animal(animal_id):
+    """
+    Devolve uma lista única com todos os medicamentos
+    associados aos animais indicados.
+
+    Parâmetros:
+        caminho_bd (str): caminho para a base de dados SQLite.
+        animal_id (list): lista com os IDs dos animais.
+
+    Retorna:
+        list[dict]: lista de medicamentos com os campos
+                    id, nome_medicamento, quantidade e id_animal.
+    """
+
+    if not animal_id:
+        return []
+
+    if isinstance(animal_id, int):
+        animal_id = [animal_id]
+
+    # Remove IDs None da lista
+    animal_id = [id for id in animal_id if id is not None]
+
+    if not animal_id:
+        return []
+
+    conn = sqlite3.connect(CAMINHO_BD)
+
+    try:
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
+
+        placeholders = ",".join("?" for _ in animal_id)
+
+        cursor.execute(
+            f"""
+            SELECT id, nome_medicamento, quantidade, id_animal
+            FROM medicamentos
+            WHERE id_animal IN ({placeholders})
+            """,
+            tuple(animal_id)
+        )
+
+        return [dict(linha) for linha in cursor.fetchall()]
+
     finally:
         conn.close()
