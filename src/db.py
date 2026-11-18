@@ -179,3 +179,38 @@ def obter_medicamentos_por_animal(animal_id):
 
     finally:
         conn.close()
+
+
+def obter_animais_a_tomar_medicacao(dono_id):
+    """
+    Devolve uma lista de animais do dono indicado que têm medicação registada.
+
+    Parâmetros:
+        dono_id (int): ID do dono.
+
+    Retorna:
+        list[dict]: lista de animais com os campos
+                    id, nome, especie, raca, nome_medicamento e quantidade.
+    """
+
+    conn = sqlite3.connect(CAMINHO_BD)
+
+    try:
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
+
+        cursor.execute(
+            """
+            SELECT a.id, a.nome, a.especie, a.raca,
+                   m.nome_medicamento, m.quantidade
+            FROM animais a
+            JOIN medicamentos m ON a.id = m.id_animal
+            WHERE a.dono_id = ?
+            """,
+            (dono_id,)
+        )
+
+        return [dict(linha) for linha in cursor.fetchall()]
+
+    finally:
+        conn.close()

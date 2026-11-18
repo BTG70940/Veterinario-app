@@ -1,12 +1,45 @@
 """Menu principal da aplicação."""
 import donos
 import animais
+from db import obter_animais_a_tomar_medicacao
 from historicos import menu
+
+
+def mostrar_animais_com_medicacao(user_logado):
+    """
+    Mostra os animais diferentes que têm medicação registada.
+
+    Parâmetros:
+        user_logado (int): ID do dono autenticado.
+    """
+
+    animais = obter_animais_a_tomar_medicacao(user_logado)
+
+    if not animais:
+        return
+
+    print("\n===== ATENÇÃO: SEUS ANIMAIS A TOMAR MEDICAÇÃO =====")
+
+    animais_unicos = {}
+
+    for animal in animais:
+        animais_unicos[animal["id"]] = animal
+
+    for animal in animais_unicos.values():
+        print(
+            f"- {animal['nome']} "
+            f"({animal['especie']})"
+        )
+
+    print("=======================================================")
+
+
 
 
 def menu_principal(USER_LOGADO):
     """Mostra o menu principal e encaminha para cada área."""
     while True:
+        mostrar_animais_com_medicacao(USER_LOGADO)
         print("\n=== Clínica Veterinária ===")
         print("1. Donos")
         print("2. Animais")
