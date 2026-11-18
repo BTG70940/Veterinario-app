@@ -6,6 +6,8 @@ import sqlite3
 import unicodedata
 from datetime import date, datetime
 from xml.sax.saxutils import escape
+
+from donos import adicionar_dono
  
 BASE_DADOS = "veterinario.db"
 FICHEIRO_JSON = "animais.json"  # usado apenas para importar dados antigos
@@ -55,17 +57,53 @@ def criar_tabelas(conn):
         """)
  
  
-def obter_ou_criar_dono(conn, nome, contacto):
-    """Reutiliza o dono se já existir (mesmo nome e contacto), senão cria."""
+
+def obter_ou_criar_dono(conn, nome):
+    """Reutiliza o dono se existir; caso contrário, cria um novo."""
+
     linha = conn.execute(
-        "SELECT id FROM donos WHERE nome = ? AND contacto = ?", (nome, contacto)
-    ).fetchone()
-    if linha:
-        return linha["id"]
-    cur = conn.execute(
-        "INSERT INTO donos (nome, contacto) VALUES (?, ?)", (nome, contacto)
-    )
-    return cur.lastrowid
+        """
+        SELECT id, telefone, morada, contacto
+        FROM donos
+        WHERE nome = ?
+        """,
+        (nome,)
+    ).fetchall()
+
+    if len(linha) > 1:
+        print(f"Encontrados múltiplos donos com o nome '{nome}'.")
+        print("Escolhe o ID do dono correto:")
+
+        for l in linha:
+            print(
+                f"  [{l['id']}] {nome} - "
+                f"contacto: {l['contacto']} - "
+                f"telefone: {l['telefone']} - "
+                f"morada: {l['morada']}"
+            )
+
+        while True:
+            try:
+                escolhido = int(input("ID do dono: "))
+            except ValueError:
+                print("ID inválido.")
+                continue
+
+            for l in linha:
+                if l["id"] == escolhido:
+                    return l["id"]
+
+            print("ID não está na lista.")
+
+    elif len(linha) == 1:
+        return linha[0]["id"]
+
+    else:
+        print(f"Não foi encontrado nenhum dono com o nome '{nome}'.")
+        print("Vamos registar um novo dono.")
+
+        return adicionar_dono()
+
  
  
 def importar_json(conn):
@@ -82,7 +120,7 @@ def importar_json(conn):
         dados = json.load(f)
     with conn:
         for a in dados:
-            dono_id = obter_ou_criar_dono(conn, a["dono"]["nome"], a["dono"]["contacto"])
+            dono_id = obter_ou_criar_dono(conn, a["dono"]["nome"])
             conn.execute(
                 """INSERT INTO animais
                    (id, nome, especie, raca, data_nascimento, sexo, peso_kg,
@@ -220,7 +258,7 @@ def registar_animal(conn):
     notas = pedir_texto("Notas clínicas: ", obrigatorio=False) or None
  
     with conn:  # se algo falhar, nada fica gravado a meio
-        dono_id = obter_ou_criar_dono(conn, dono_nome, dono_contacto)
+        dono_id = obter_ou_criar_dono(conn, dono_nome)
         cur = conn.execute(
             """INSERT INTO animais
                (nome, especie, raca, data_nascimento, sexo, peso_kg,
