@@ -1,4 +1,7 @@
 """Área de administração da clínica: animais, donos, fornecedores e produtos."""
+import getpass
+import hashlib
+import hmac
 import sqlite3
 
 import animais
@@ -309,6 +312,8 @@ def menu_produtos():
 def menu_administracao():
     """Menu da área de administração."""
     criar_tabelas_admin()
+    if not verificar_admin():
+        return
     while True:
         print("\n--- Administração ---")
         print("1. Quantos animais estão registados")
@@ -336,3 +341,21 @@ def menu_administracao():
             break
         else:
             print("Opção inválida.")
+
+
+# ---------- Acesso restrito ----------
+
+# Hash SHA-256 da palavra-passe de administrador (a palavra-passe em si não é guardada).
+HASH_ADMIN = "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918"
+
+
+def verificar_admin():
+    """Pede a palavra-passe de administrador. Devolve True se estiver correta."""
+    for _ in range(3):
+        tentativa = getpass.getpass("Palavra-passe de administrador: ")
+        hash_tentativa = hashlib.sha256(tentativa.encode()).hexdigest()
+        if hmac.compare_digest(hash_tentativa, HASH_ADMIN):
+            return True
+        print("Palavra-passe incorreta.")
+    print("Demasiadas tentativas. Acesso negado.")
+    return False
