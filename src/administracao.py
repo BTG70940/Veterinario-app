@@ -181,3 +181,124 @@ def menu_fornecedores():
             break
         else:
             print("Opção inválida.")
+
+
+# ---------- Produtos ----------
+
+def _pedir_fornecedor(atual=None):
+    """Pede o id de um fornecedor existente. Vazio mantém o valor atual (ou nenhum)."""
+    if not db.consultar("SELECT 1 FROM fornecedores"):
+        return atual
+    listar_fornecedores()
+    while True:
+        valor = input("Id do fornecedor (vazio para manter/nenhum): ").strip()
+        if not valor:
+            return atual
+        if valor.isdigit() and db.consultar(
+            "SELECT 1 FROM fornecedores WHERE id = ?", (int(valor),)
+        ):
+            return int(valor)
+        print("Fornecedor não encontrado.")
+
+
+def listar_produtos():
+    """Mostra os produtos e devolve a lista."""
+    linhas = db.consultar(
+        """
+        SELECT p.*, f.nome AS fornecedor_nome
+        FROM produtos p
+        LEFT JOIN fornecedores f ON f.id = p.fornecedor_id
+        ORDER BY p.nome
+        """
+    )
+    if not linhas:
+        print("Ainda não há produtos registados.")
+        return []
+    for p in linhas:
+        print(
+            f"[{p['id']}] {p['nome']} | {p['categoria'] or '—'} | "
+            f"{p['preco']:.2f} € | stock: {p['stock']} | "
+            f"fornecedor: {p['fornecedor_nome'] or '—'}"
+        )
+    return linhas
+
+
+def registar_produto():
+    """Regista um novo produto."""
+    print("\n--- Novo produto ---")
+    nome = animais.pedir_texto("Nome: ")
+    categoria = animais.pedir_texto("Categoria (opcional): ", obrigatorio=False) or None
+    preco = _pedir_numero("Preço em €: ", float)
+    stock = _pedir_numero("Quantidade em stock: ", int)
+    fornecedor_id = _pedir_fornecedor()
+    id_p = db.executar(
+        "INSERT INTO produtos (nome, categoria, preco, stock, fornecedor_id) "
+        "VALUES (?, ?, ?, ?, ?)",
+        (nome, categoria, preco, stock, fornecedor_id),
+    )
+    print(f"Produto registado com o id {id_p}.")
+
+
+def atualizar_produto():
+    """Altera os dados de um produto."""
+    if not listar_produtos():
+        return
+    id_p = _pedir_id("Id do produto a atualizar: ")
+    linhas = db.consultar("SELECT * FROM produtos WHERE id = ?", (id_p,)) if id_p else []
+    if not linhas:
+        print("Produto não encontrado.")
+        return
+    p = linhas[0]
+    print("Deixa em branco para manter o valor atual.")
+    nome = input(f"Nome [{p['nome']}]: ").strip() or p["nome"]
+    categoria = input(f"Categoria [{p['categoria'] or '—'}]: ").strip() or p["categoria"]
+    preco = _pedir_numero(f"Preço em € [{p['preco']:.2f}]: ", float, p["preco"])
+    stock = _pedir_numero(f"Stock [{p['stock']}]: ", int, p["stock"])
+    fornecedor_id = _pedir_fornecedor(p["fornecedor_id"])
+    db.executar(
+        "UPDATE produtos SET nome = ?, categoria = ?, preco = ?, stock = ?, "
+        "fornecedor_id = ? WHERE id = ?",
+        (nome, categoria, preco, stock, fornecedor_id, p["id"]),
+    )
+    print("Produto atualizado.")
+
+
+def eliminar_produto():
+    """Elimina um produto."""
+    if not listar_produtos():
+        return
+    id_p = _pedir_id("Id do produto a eliminar: ")
+    linhas = db.consultar("SELECT * FROM produtos WHERE id = ?", (id_p,)) if id_p else []
+    if not linhas:
+        print("Produto não encontrado.")
+        return
+    if input(f"Eliminar '{linhas[0]['nome']}'? (s/n): ").strip().lower() != "s":
+        print("Cancelado.")
+        return
+    db.executar("DELETE FROM produtos WHERE id = ?", (id_p,))
+    print("Produto eliminado.")
+
+
+def menu_produtos():
+    """Submenu de gestão de produtos."""
+    while True:
+        print("\n--- Produtos ---")
+        print("1. Registar produto")
+        print("2. Listar produtos")
+        print("3. Atualizar produto")
+        print("4. Eliminar produto")
+        print("0. Voltar")
+        opcao = input("Escolhe uma opção: ").strip()
+
+        if opcao == "1":
+            registar_produto()
+        elif opcao == "2":
+            listar_produtos()
+        elif opcao == "3":
+            atualizar_produto()
+        elif opcao == "4":
+            eliminar_produto()
+        elif opcao == "0":
+            break
+        else:
+            print("Opção inválida.")
