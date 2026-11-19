@@ -7,20 +7,20 @@ from datetime import date, datetime
 from xml.sax.saxutils import escape
 
 from donos import adicionar_dono
- 
+
 BASE_DADOS = "veterinario.db"
 FICHEIRO_JSON = "animais.json"  # usado apenas para importar dados antigos
- 
- 
+
+
 # ---------- Base de dados ----------
- 
+
 def ligar():
     conn = sqlite3.connect(BASE_DADOS)
     conn.row_factory = sqlite3.Row  # permite aceder às colunas por nome
     conn.execute("PRAGMA foreign_keys = ON")
     return conn
- 
- 
+
+
 def criar_tabelas(conn):
     with conn:
         conn.executescript("""
@@ -70,8 +70,7 @@ def criar_tabelas(conn):
                 consulta_id INTEGER NOT NULL REFERENCES consultas(id)
             );
         """)
- 
- 
+
 
 def obter_ou_criar_dono(conn, nome):
     """Reutiliza o dono se existir; caso contrário, cria um novo."""
@@ -119,8 +118,7 @@ def obter_ou_criar_dono(conn, nome):
 
         return adicionar_dono()
 
- 
- 
+
 def importar_json(conn):
     """Se existir um animais.json antigo e a base de dados estiver vazia,
     oferece-se para importar os registos."""
@@ -128,7 +126,8 @@ def importar_json(conn):
         return
     if conn.execute("SELECT COUNT(*) FROM animais").fetchone()[0] > 0:
         return
-    resposta = input(f"Encontrei {FICHEIRO_JSON}. Importar para a base de dados? (s/n): ")
+    resposta = input(
+        f"Encontrei {FICHEIRO_JSON}. Importar para a base de dados? (s/n): ")
     if resposta.strip().lower() != "s":
         return
     with open(FICHEIRO_JSON, "r", encoding="utf-8") as f:
@@ -146,18 +145,18 @@ def importar_json(conn):
                  dono_id, a["notas"] or None, a["data_inscricao"]),
             )
     print(f"{len(dados)} animais importados.")
- 
- 
+
+
 # ---------- Entrada de dados ----------
- 
+
 def pedir_texto(mensagem, obrigatorio=True):
     while True:
         valor = input(mensagem).strip()
         if valor or not obrigatorio:
             return valor
         print("Este campo é obrigatório.")
- 
- 
+
+
 def pedir_data(mensagem):
     """Pede DD-MM-AAAA e devolve AAAA-MM-DD (ou None se vazio)."""
     while True:
@@ -168,8 +167,8 @@ def pedir_data(mensagem):
             return datetime.strptime(valor, "%d-%m-%Y").date().isoformat()
         except ValueError:
             print("Data inválida. Usa o formato DD-MM-AAAA (ou deixa vazio).")
- 
- 
+
+
 def pedir_peso(mensagem):
     while True:
         valor = input(mensagem).strip().replace(",", ".")
@@ -182,17 +181,17 @@ def pedir_peso(mensagem):
         except ValueError:
             pass
         print("Peso inválido. Escreve um número positivo (ou deixa vazio).")
- 
- 
+
+
 # ---------- Utilitários ----------
- 
+
 def formatar_data(iso):
     """AAAA-MM-DD -> DD-MM-AAAA, para mostrar ao utilizador."""
     if not iso:
         return "—"
     return date.fromisoformat(iso).strftime("%d-%m-%Y")
- 
- 
+
+
 def calcular_idade(data_nascimento):
     if not data_nascimento:
         return "—"
@@ -208,36 +207,38 @@ def calcular_idade(data_nascimento):
     if meses or not anos:
         partes.append(f"{meses} " + ("meses" if meses != 1 else "mês"))
     return " e ".join(partes)
- 
- 
+
+
 CONSULTA_FICHA = """
     SELECT a.*, d.nome AS dono_nome, d.contacto AS dono_contacto
     FROM animais a
     JOIN donos d ON d.id = a.dono_id
 """
- 
- 
+
+
 def escolher_animal(conn):
     """Pede um ID, nome do animal ou nome do dono e devolve o animal escolhido."""
     termo = pedir_texto("ID, nome do animal ou nome do dono: ")
     if termo.isdigit():
-        linhas = conn.execute(CONSULTA_FICHA + " WHERE a.id = ?", (int(termo),)).fetchall()
+        linhas = conn.execute(
+            CONSULTA_FICHA + " WHERE a.id = ?", (int(termo),)).fetchall()
     else:
         padrao = f"%{termo}%"
         linhas = conn.execute(
             CONSULTA_FICHA + " WHERE a.nome LIKE ? OR d.nome LIKE ? ORDER BY a.nome",
             (padrao, padrao),
         ).fetchall()
- 
+
     if not linhas:
         print("Animal não encontrado.")
         return None
     if len(linhas) == 1:
         return linhas[0]
- 
+
     print("\nVárias correspondências:")
     for a in linhas:
-        print(f"  [{a['id']}] {a['nome']} - {a['especie']} - dono: {a['dono_nome']}")
+        print(
+            f"  [{a['id']}] {a['nome']} - {a['especie']} - dono: {a['dono_nome']}")
     try:
         escolhido = int(input("Escolhe o ID: "))
     except ValueError:
@@ -248,8 +249,8 @@ def escolher_animal(conn):
             return a
     print("ID não está na lista.")
     return None
- 
- 
+
+
 def obter_consultas(conn, animal_id):
     """Todas as consultas de um animal, da mais recente para a mais antiga."""
     return conn.execute(
@@ -264,10 +265,10 @@ def obter_vacinas(conn, animal_id):
         "SELECT * FROM vacinas WHERE animal_id = ? ORDER BY data_administracao DESC, id DESC",
         (animal_id,),
     ).fetchall()
- 
- 
+
+
 # ---------- Funcionalidades ----------
- 
+
 def registar_animal(conn):
     print("\n--- Novo animal ---")
     nome = pedir_texto("Nome: ")
@@ -279,7 +280,7 @@ def registar_animal(conn):
     dono_nome = pedir_texto("Nome do dono: ")
     dono_contacto = pedir_texto("Contacto do dono: ")
     notas = pedir_texto("Notas clínicas: ", obrigatorio=False) or None
- 
+
     with conn:  # se algo falhar, nada fica gravado a meio
         dono_id = obter_ou_criar_dono(conn, dono_nome)
         cur = conn.execute(
@@ -291,8 +292,8 @@ def registar_animal(conn):
              dono_id, notas, date.today().isoformat()),
         )
     print(f"\nAnimal registado com o ID {cur.lastrowid}.")
- 
- 
+
+
 def listar_animais(conn):
     print("\n--- Todos os animais ---")
     linhas = conn.execute(CONSULTA_FICHA + " ORDER BY a.id").fetchall()
@@ -301,8 +302,8 @@ def listar_animais(conn):
         return
     for a in linhas:
         print(f"[{a['id']}] {a['nome']} - {a['especie']} - dono: {a['dono_nome']}")
- 
- 
+
+
 def pesquisar_animais(conn):
     termo = pedir_texto("Pesquisar por nome do animal ou do dono: ")
     padrao = f"%{termo}%"
@@ -315,8 +316,7 @@ def pesquisar_animais(conn):
         return
     for a in linhas:
         print(f"[{a['id']}] {a['nome']} - {a['especie']} - dono: {a['dono_nome']}")
- 
- 
+
 
 def registar_doenca(conn, consulta_id):
     """Regista uma doença associada a uma consulta."""
@@ -335,7 +335,6 @@ def registar_doenca(conn, consulta_id):
     )
 
     print("Doença registada com sucesso.")
-
 
 
 def registar_consulta(conn):
@@ -388,7 +387,6 @@ def registar_consulta(conn):
     print("\nConsulta registada com sucesso.")
 
 
-
 def registar_vacina(conn):
     print("\n--- Registar vacina ---")
     animal = escolher_animal(conn)
@@ -396,11 +394,13 @@ def registar_vacina(conn):
         return
     print(f"Animal: {animal['nome']} ({animal['especie']})")
     nome_vacina = pedir_texto("Nome da vacina (ex: Raiva, Polivalente): ")
-    
+
     print("Data de administração (deixa vazio para hoje):")
     data_admin = pedir_data("Data (DD-MM-AAAA): ") or date.today().isoformat()
-    proxima_dose = pedir_data("Data da próxima dose / reforço (DD-MM-AAAA, opcional): ")
-    lote = pedir_texto("Número de lote (opcional): ", obrigatorio=False) or None
+    proxima_dose = pedir_data(
+        "Data da próxima dose / reforço (DD-MM-AAAA, opcional): ")
+    lote = pedir_texto("Número de lote (opcional): ",
+                       obrigatorio=False) or None
     notas = pedir_texto("Notas (opcional): ", obrigatorio=False) or None
 
     with conn:
@@ -411,26 +411,28 @@ def registar_vacina(conn):
             (animal["id"], nome_vacina, data_admin, proxima_dose, lote, notas),
         )
     print("Vacina registada com sucesso.")
- 
- 
+
+
 def consultar_situacao(conn):
     """Resumo da situação atual do animal: dados, última consulta, vacinas e historial."""
     print("\n--- Situação atual do animal ---")
     a = escolher_animal(conn)
     if not a:
         return
- 
+
     consultas = obter_consultas(conn, a["id"])
     vacinas = obter_vacinas(conn, a["id"])
- 
+
     peso = f"{a['peso_kg']} kg" if a["peso_kg"] else "—"
     print(f"\n=== {a['nome']} (ID {a['id']}) ===")
-    print(f"Espécie: {a['especie']}   Raça: {a['raca'] or '—'}   Sexo: {a['sexo'] or '—'}")
-    print(f"Idade: {calcular_idade(a['data_nascimento'])}   Peso atual: {peso}")
+    print(
+        f"Espécie: {a['especie']}   Raça: {a['raca'] or '—'}   Sexo: {a['sexo'] or '—'}")
+    print(
+        f"Idade: {calcular_idade(a['data_nascimento'])}   Peso atual: {peso}")
     print(f"Dono: {a['dono_nome']} ({a['dono_contacto']})")
     print(f"Inscrito em: {formatar_data(a['data_inscricao'])}")
     print(f"Notas gerais: {a['notas'] or '—'}")
- 
+
     print("\nÚltima consulta:")
     if not consultas:
         print("  Ainda sem consultas registadas.")
@@ -448,23 +450,26 @@ def consultar_situacao(conn):
         for v in vacinas[:5]:
             prox = f" | Próxima dose: {formatar_data(v['proxima_dose'])}" if v['proxima_dose'] else ""
             lote_str = f" (Lote: {v['lote']})" if v['lote'] else ""
-            print(f"  {formatar_data(v['data_administracao'])} - {v['nome']}{lote_str}{prox}")
+            print(
+                f"  {formatar_data(v['data_administracao'])} - {v['nome']}{lote_str}{prox}")
         if len(vacinas) > 5:
             print(f"  ... e mais {len(vacinas) - 5} anterior(es).")
- 
-    print(f"\nHistorial de consultas ({len(consultas)} consulta(s), mais recentes primeiro):")
+
+    print(
+        f"\nHistorial de consultas ({len(consultas)} consulta(s), mais recentes primeiro):")
     for c in consultas[:5]:
         print(f"  {formatar_data(c['data'])} - {c['motivo']}")
     if len(consultas) > 5:
         print(f"  ... e mais {len(consultas) - 5} anterior(es).")
- 
- 
+
+
 def nome_ficheiro_seguro(texto):
     """'João Pedro' -> 'Joao_Pedro' (sem acentos nem caracteres problemáticos)."""
-    sem_acentos = unicodedata.normalize("NFKD", texto).encode("ascii", "ignore").decode()
+    sem_acentos = unicodedata.normalize(
+        "NFKD", texto).encode("ascii", "ignore").decode()
     return re.sub(r"[^A-Za-z0-9_-]+", "_", sem_acentos).strip("_") or "animal"
- 
- 
+
+
 def exportar_pdf(conn):
     """Gera um PDF com a ficha completa do animal, consultas e vacinas."""
     print("\n--- Exportar ficha em PDF ---")
@@ -477,55 +482,61 @@ def exportar_pdf(conn):
     except ImportError:
         print("Falta a biblioteca reportlab. Instala com: pip install reportlab")
         return
- 
+
     a = escolher_animal(conn)
     if not a:
         return
     consultas = obter_consultas(conn, a["id"])
     vacinas = obter_vacinas(conn, a["id"])
- 
+
     def texto(valor):
         """Texto seguro para Paragraph: escapa <, > e & e preserva quebras de linha."""
         return escape(str(valor)).replace("\n", "<br/>") if valor else "—"
- 
+
     cor_principal = colors.HexColor("#1F4E5F")
     estilos = getSampleStyleSheet()
     estilo_titulo = ParagraphStyle("Titulo", parent=estilos["Title"], textColor=cor_principal,
                                    alignment=0, fontSize=22, spaceAfter=2)
-    estilo_sub = ParagraphStyle("Sub", parent=estilos["Normal"], textColor=colors.grey, fontSize=10)
+    estilo_sub = ParagraphStyle(
+        "Sub", parent=estilos["Normal"], textColor=colors.grey, fontSize=10)
     estilo_sec = ParagraphStyle("Sec", parent=estilos["Heading2"], textColor=cor_principal,
                                 spaceBefore=14, spaceAfter=6)
-    estilo_cel = ParagraphStyle("Cel", parent=estilos["Normal"], fontSize=9, leading=12)
+    estilo_cel = ParagraphStyle(
+        "Cel", parent=estilos["Normal"], fontSize=9, leading=12)
     estilo_rotulo = ParagraphStyle("Rotulo", parent=estilo_cel, fontName="Helvetica-Bold",
                                    textColor=cor_principal)
     estilo_cab = ParagraphStyle("Cab", parent=estilo_cel, fontName="Helvetica-Bold",
                                 textColor=colors.white)
- 
+
     peso = f"{a['peso_kg']} kg" if a["peso_kg"] else None
     dados = [
         ("Nome", a["nome"]),
         ("Espécie", a["especie"]),
         ("Raça", a["raca"]),
         ("Sexo", a["sexo"]),
-        ("Data de nascimento", formatar_data(a["data_nascimento"]) if a["data_nascimento"] else None),
-        ("Idade", calcular_idade(a["data_nascimento"]) if a["data_nascimento"] else None),
+        ("Data de nascimento", formatar_data(
+            a["data_nascimento"]) if a["data_nascimento"] else None),
+        ("Idade", calcular_idade(a["data_nascimento"])
+         if a["data_nascimento"] else None),
         ("Peso atual", peso),
         ("Dono", a["dono_nome"]),
         ("Contacto do dono", a["dono_contacto"]),
         ("Inscrito em", formatar_data(a["data_inscricao"])),
     ]
     tabela_dados = Table(
-        [[Paragraph(r, estilo_rotulo), Paragraph(texto(v), estilo_cel)] for r, v in dados],
+        [[Paragraph(r, estilo_rotulo), Paragraph(texto(v), estilo_cel)]
+         for r, v in dados],
         colWidths=[4.5 * cm, 12.5 * cm],
     )
     tabela_dados.setStyle(TableStyle([
-        ("ROWBACKGROUNDS", (0, 0), (-1, -1), [colors.whitesmoke, colors.white]),
+        ("ROWBACKGROUNDS", (0, 0), (-1, -1),
+         [colors.whitesmoke, colors.white]),
         ("LINEBELOW", (0, 0), (-1, -1), 0.25, colors.lightgrey),
         ("VALIGN", (0, 0), (-1, -1), "TOP"),
         ("TOPPADDING", (0, 0), (-1, -1), 5),
         ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
     ]))
- 
+
     story = [
         Paragraph("Ficha do Animal", estilo_titulo),
         Paragraph(f"{texto(a['nome'])} · ID {a['id']}", estilo_sub),
@@ -545,7 +556,8 @@ def exportar_pdf(conn):
             linhas_vac.append([
                 Paragraph(formatar_data(v["data_administracao"]), estilo_cel),
                 Paragraph(texto(v["nome"]), estilo_cel),
-                Paragraph(formatar_data(v["proxima_dose"]) if v["proxima_dose"] else "—", estilo_cel),
+                Paragraph(formatar_data(v["proxima_dose"])
+                          if v["proxima_dose"] else "—", estilo_cel),
                 Paragraph(texto(v["lote"]), estilo_cel),
                 Paragraph(texto(v["notas"]), estilo_cel),
             ])
@@ -556,7 +568,8 @@ def exportar_pdf(conn):
         )
         tabela_vacinas.setStyle(TableStyle([
             ("BACKGROUND", (0, 0), (-1, 0), cor_principal),
-            ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, colors.whitesmoke]),
+            ("ROWBACKGROUNDS", (0, 1), (-1, -1),
+             [colors.white, colors.whitesmoke]),
             ("GRID", (0, 0), (-1, -1), 0.25, colors.lightgrey),
             ("VALIGN", (0, 0), (-1, -1), "TOP"),
             ("TOPPADDING", (0, 0), (-1, -1), 4),
@@ -566,8 +579,9 @@ def exportar_pdf(conn):
     else:
         story.append(Paragraph("Ainda sem vacinas registadas.", estilo_cel))
 
-    story.append(Paragraph(f"Historial de consultas ({len(consultas)})", estilo_sec))
- 
+    story.append(
+        Paragraph(f"Historial de consultas ({len(consultas)})", estilo_sec))
+
     if consultas:
         linhas = [[Paragraph(c, estilo_cab) for c in
                    ("Data", "Motivo", "Diagnóstico", "Tratamento", "Peso")]]
@@ -577,7 +591,8 @@ def exportar_pdf(conn):
                 Paragraph(texto(c["motivo"]), estilo_cel),
                 Paragraph(texto(c["diagnostico"]), estilo_cel),
                 Paragraph(texto(c["tratamento"]), estilo_cel),
-                Paragraph(f"{c['peso_kg']} kg" if c["peso_kg"] else "—", estilo_cel),
+                Paragraph(f"{c['peso_kg']} kg" if c["peso_kg"]
+                          else "—", estilo_cel),
             ])
         tabela_consultas = Table(
             linhas,
@@ -586,7 +601,8 @@ def exportar_pdf(conn):
         )
         tabela_consultas.setStyle(TableStyle([
             ("BACKGROUND", (0, 0), (-1, 0), cor_principal),
-            ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, colors.whitesmoke]),
+            ("ROWBACKGROUNDS", (0, 1), (-1, -1),
+             [colors.white, colors.whitesmoke]),
             ("GRID", (0, 0), (-1, -1), 0.25, colors.lightgrey),
             ("VALIGN", (0, 0), (-1, -1), "TOP"),
             ("TOPPADDING", (0, 0), (-1, -1), 4),
@@ -595,7 +611,7 @@ def exportar_pdf(conn):
         story.append(tabela_consultas)
     else:
         story.append(Paragraph("Ainda sem consultas registadas.", estilo_cel))
- 
+
     def rodape(canvas, doc):
         canvas.saveState()
         canvas.setFont("Helvetica", 8)
@@ -604,7 +620,7 @@ def exportar_pdf(conn):
                           f"Clínica Veterinária · gerado em {date.today().strftime('%d-%m-%Y')}")
         canvas.drawRightString(A4[0] - 2 * cm, 1.2 * cm, f"Página {doc.page}")
         canvas.restoreState()
- 
+
     ficheiro = f"ficha_{nome_ficheiro_seguro(a['nome'])}_{a['id']}.pdf"
     doc = SimpleDocTemplate(
         ficheiro, pagesize=A4,
@@ -617,17 +633,77 @@ def exportar_pdf(conn):
         print(f"Não foi possível gravar o PDF: {erro}")
         return
     print(f"PDF criado: {os.path.abspath(ficheiro)}")
- 
+
 
 def atualizar_esquema(conn):
     """Acrescenta colunas que faltem em bases de dados criadas por versões antigas."""
-    colunas = {linha["name"] for linha in conn.execute("PRAGMA table_info(donos)")}
+    colunas = {linha["name"]
+               for linha in conn.execute("PRAGMA table_info(donos)")}
     if "contacto" not in colunas:
         with conn:
-            conn.execute("ALTER TABLE donos ADD COLUMN contacto TEXT NOT NULL DEFAULT ''")
+            conn.execute(
+                "ALTER TABLE donos ADD COLUMN contacto TEXT NOT NULL DEFAULT ''")
 
 # ---------- Menu ----------
- 
+
+
+def atualizar_animal(conn):
+    """Altera os dados de um animal existente."""
+    print("\n--- Atualizar animal ---")
+    a = escolher_animal(conn)
+    if not a:
+        return
+
+    print(
+        f"A atualizar {a['nome']} (ID {a['id']}). Deixa em branco para manter o valor atual.")
+    nome = input(f"Nome [{a['nome']}]: ").strip() or a["nome"]
+    especie = input(f"Espécie [{a['especie']}]: ").strip() or a["especie"]
+    raca = input(f"Raça [{a['raca'] or '—'}]: ").strip() or a["raca"]
+    sexo = input(
+        f"Sexo (M/F) [{a['sexo'] or '—'}]: ").strip().upper() or a["sexo"]
+
+    nascimento = a["data_nascimento"]
+    while True:
+        valor = input(
+            f"Data de nascimento (DD-MM-AAAA) [{formatar_data(a['data_nascimento'])}]: "
+        ).strip()
+        if not valor:
+            break
+        try:
+            nascimento = datetime.strptime(
+                valor, "%d-%m-%Y").date().isoformat()
+            break
+        except ValueError:
+            print("Data inválida. Usa o formato DD-MM-AAAA (ou deixa vazio).")
+
+    peso = a["peso_kg"]
+    while True:
+        valor = input(
+            f"Peso em kg [{a['peso_kg'] or '—'}]: ").strip().replace(",", ".")
+        if not valor:
+            break
+        try:
+            novo_peso = float(valor)
+            if novo_peso > 0:
+                peso = novo_peso
+                break
+        except ValueError:
+            pass
+        print("Peso inválido. Escreve um número positivo (ou deixa vazio).")
+
+    notas = input(f"Notas [{a['notas'] or '—'}]: ").strip() or a["notas"]
+
+    with conn:
+        conn.execute(
+            """UPDATE animais
+               SET nome = ?, especie = ?, raca = ?, data_nascimento = ?,
+                   sexo = ?, peso_kg = ?, notas = ?
+               WHERE id = ?""",
+            (nome, especie, raca, nascimento, sexo, peso, notas, a["id"]),
+        )
+    print("Animal atualizado.")
+
+
 def menu():
     conn = ligar()
     criar_tabelas(conn)
@@ -643,9 +719,10 @@ def menu():
             print("5. Registar vacina")
             print("6. Consultar situação atual de um animal")
             print("7. Exportar ficha de um animal em PDF")
+            print("8. Atualizar animal")
             print("0. Sair")
             opcao = input("Opção: ").strip()
- 
+
             if opcao == "1":
                 registar_animal(conn)
             elif opcao == "2":
@@ -653,13 +730,16 @@ def menu():
             elif opcao == "3":
                 pesquisar_animais(conn)
             elif opcao == "4":
-                registar_consultas_op = registar_consulta(conn) # Mantém chamada normal
+                registar_consultas_op = registar_consulta(
+                    conn)  # Mantém chamada normal
             elif opcao == "5":
                 registar_vacina(conn)
             elif opcao == "6":
                 consultar_situacao(conn)
             elif opcao == "7":
                 exportar_pdf(conn)
+            elif opcao == "8":
+                atualizar_animal(conn)
             elif opcao == "0":
                 print("Até logo!")
                 break
@@ -667,7 +747,7 @@ def menu():
                 print("Opção inválida.")
     finally:
         conn.close()
- 
- 
+
+
 if __name__ == "__main__":
     menu()
