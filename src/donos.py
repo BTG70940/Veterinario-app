@@ -28,12 +28,14 @@ def adicionar_dono():
 
 def listar_donos():
     """Mostra todos os donos registados."""
-    donos = db.consultar("SELECT id, nome, contacto, email FROM donos ORDER BY nome")
+    donos = db.consultar(
+        "SELECT id, nome, contacto, email FROM donos ORDER BY nome")
     if not donos:
         print("Ainda não há donos registados.")
         return
     for dono in donos:
-        print(f"[{dono['id']}] {dono['nome']} | {dono['contacto']} | {dono['email'] or '—'}")
+        print(
+            f"[{dono['id']}] {dono['nome']} | {dono['contacto']} | {dono['email'] or '—'}")
 
 
 def menu_donos():
@@ -42,6 +44,7 @@ def menu_donos():
         print("\n--- Donos ---")
         print("1. Registar dono")
         print("2. Listar donos")
+        print("3. Atualizar dono")
         print("0. Voltar")
         opcao = input("Escolhe uma opção: ").strip()
 
@@ -71,9 +74,11 @@ def atualizar_dono():
     dono = linhas[0]
     print("Deixa em branco para manter o valor atual.")
     nome = input(f"Nome [{dono['nome']}]: ").strip() or dono["nome"]
-    contacto = input(f"Contacto [{dono['contacto']}]: ").strip() or dono["contacto"]
+    contacto = input(
+        f"Contacto [{dono['contacto']}]: ").strip() or dono["contacto"]
     email = input(f"Email [{dono['email'] or '—'}]: ").strip() or dono["email"]
-    morada = input(f"Morada [{dono['morada'] or '—'}]: ").strip() or dono["morada"]
+    morada = input(
+        f"Morada [{dono['morada'] or '—'}]: ").strip() or dono["morada"]
 
     try:
         db.executar(
