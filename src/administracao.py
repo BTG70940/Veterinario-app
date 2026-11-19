@@ -302,3 +302,37 @@ def menu_produtos():
             break
         else:
             print("Opção inválida.")
+
+
+# ---------- Menu ----------
+
+def menu_administracao():
+    """Menu da área de administração."""
+    criar_tabelas_admin()
+    while True:
+        print("\n--- Administração ---")
+        print("1. Quantos animais estão registados")
+        print("2. Listar todos os animais")
+        print("3. Pesquisar animais")
+        print("4. Listar todos os donos")
+        print("5. Gerir fornecedores")
+        print("6. Gerir produtos")
+        print("0. Voltar")
+        opcao = input("Escolhe uma opção: ").strip()
+
+        if opcao == "1":
+            contar_animais()
+        elif opcao == "2":
+            listar_todos_animais()
+        elif opcao == "3":
+            pesquisar_todos_animais()
+        elif opcao == "4":
+            donos.listar_donos()
+        elif opcao == "5":
+            menu_fornecedores()
+        elif opcao == "6":
+            menu_produtos()
+        elif opcao == "0":
+            break
+        else:
+            print("Opção inválida.")
