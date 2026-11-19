@@ -1,6 +1,7 @@
 """Menu principal da aplicação."""
 import donos
 import animais
+import administracao
 from db import obter_animais_a_tomar_medicacao
 from historicos import menu
 
@@ -58,7 +59,7 @@ def menu_principal(USER_LOGADO):
         elif opcao == "4":
             menu.menu_historicos(USER_LOGADO)  # stories 10, 11
         elif opcao == "5":
-            print("Em construção...")  # stories 8, 14
+            administracao.menu_administracao()  # stories 8, 14
         elif opcao == "0":
             print("Até breve!")
             break
