@@ -79,3 +79,105 @@ def pesquisar_todos_animais():
         animais.pesquisar_animais(conn)
     finally:
         conn.close()
+
+
+# ---------- Fornecedores ----------
+
+def listar_fornecedores():
+    """Mostra os fornecedores e devolve a lista."""
+    linhas = db.consultar("SELECT * FROM fornecedores ORDER BY nome")
+    if not linhas:
+        print("Ainda não há fornecedores registados.")
+        return []
+    for f in linhas:
+        print(f"[{f['id']}] {f['nome']} | {f['contacto'] or '—'} | {f['email'] or '—'}")
+    return linhas
+
+
+def registar_fornecedor():
+    """Regista um novo fornecedor."""
+    print("\n--- Novo fornecedor ---")
+    nome = animais.pedir_texto("Nome: ")
+    contacto = animais.pedir_texto("Contacto (opcional): ", obrigatorio=False) or None
+    email = animais.pedir_texto("Email (opcional): ", obrigatorio=False) or None
+    morada = animais.pedir_texto("Morada (opcional): ", obrigatorio=False) or None
+    try:
+        id_f = db.executar(
+            "INSERT INTO fornecedores (nome, contacto, email, morada) VALUES (?, ?, ?, ?)",
+            (nome, contacto, email, morada),
+        )
+    except sqlite3.IntegrityError:
+        print("Já existe um fornecedor com esse nome.")
+        return
+    print(f"Fornecedor registado com o id {id_f}.")
+
+
+def atualizar_fornecedor():
+    """Altera os dados de um fornecedor."""
+    if not listar_fornecedores():
+        return
+    id_f = _pedir_id("Id do fornecedor a atualizar: ")
+    linhas = db.consultar("SELECT * FROM fornecedores WHERE id = ?", (id_f,)) if id_f else []
+    if not linhas:
+        print("Fornecedor não encontrado.")
+        return
+    f = linhas[0]
+    print("Deixa em branco para manter o valor atual.")
+    nome = input(f"Nome [{f['nome']}]: ").strip() or f["nome"]
+    contacto = input(f"Contacto [{f['contacto'] or '—'}]: ").strip() or f["contacto"]
+    email = input(f"Email [{f['email'] or '—'}]: ").strip() or f["email"]
+    morada = input(f"Morada [{f['morada'] or '—'}]: ").strip() or f["morada"]
+    try:
+        db.executar(
+            "UPDATE fornecedores SET nome = ?, contacto = ?, email = ?, morada = ? WHERE id = ?",
+            (nome, contacto, email, morada, f["id"]),
+        )
+    except sqlite3.IntegrityError:
+        print("Já existe outro fornecedor com esse nome.")
+        return
+    print("Fornecedor atualizado.")
+
+
+def eliminar_fornecedor():
+    """Elimina um fornecedor (se não tiver produtos associados)."""
+    if not listar_fornecedores():
+        return
+    id_f = _pedir_id("Id do fornecedor a eliminar: ")
+    linhas = db.consultar("SELECT * FROM fornecedores WHERE id = ?", (id_f,)) if id_f else []
+    if not linhas:
+        print("Fornecedor não encontrado.")
+        return
+    if input(f"Eliminar '{linhas[0]['nome']}'? (s/n): ").strip().lower() != "s":
+        print("Cancelado.")
+        return
+    try:
+        db.executar("DELETE FROM fornecedores WHERE id = ?", (id_f,))
+    except sqlite3.IntegrityError:
+        print("Não é possível eliminar: o fornecedor tem produtos associados.")
+        return
+    print("Fornecedor eliminado.")
+
+
+def menu_fornecedores():
+    """Submenu de gestão de fornecedores."""
+    while True:
+        print("\n--- Fornecedores ---")
+        print("1. Registar fornecedor")
+        print("2. Listar fornecedores")
+        print("3. Atualizar fornecedor")
+        print("4. Eliminar fornecedor")
+        print("0. Voltar")
+        opcao = input("Escolhe uma opção: ").strip()
+
+        if opcao == "1":
+            registar_fornecedor()
+        elif opcao == "2":
+            listar_fornecedores()
+        elif opcao == "3":
+            atualizar_fornecedor()
+        elif opcao == "4":
+            eliminar_fornecedor()
+        elif opcao == "0":
+            break
+        else:
+            print("Opção inválida.")
