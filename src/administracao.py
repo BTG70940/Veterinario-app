@@ -1,5 +1,8 @@
 """Área de administração da clínica."""
 import db
+import getpass
+import hashlib
+import hmac
 
 
 def contar_animais():
@@ -26,3 +29,21 @@ def menu_administracao():
             break
         else:
             print("Opção inválida.")
+
+
+# ---------- Acesso restrito ----------
+
+# Hash SHA-256 da palavra-passe de administrador (a palavra-passe em si não é guardada).
+HASH_ADMIN = "COLA_AQUI_O_HASH"
+
+
+def verificar_admin():
+    """Pede a palavra-passe de administrador. Devolve True se estiver correta."""
+    for _ in range(3):
+        tentativa = getpass.getpass("Palavra-passe de administrador: ")
+        hash_tentativa = hashlib.sha256(tentativa.encode()).hexdigest()
+        if hmac.compare_digest(hash_tentativa, HASH_ADMIN):
+            return True
+        print("Palavra-passe incorreta.")
+    print("Demasiadas tentativas. Acesso negado.")
+    return False
