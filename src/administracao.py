@@ -315,6 +315,8 @@ def menu_produtos():
 def menu_administracao():
     """Menu da área de administração."""
     criar_tabelas_admin()
+    if not verificar_admin():
+        return
     while True:
         print("\n--- Administração ---")
         print("1. Quantos animais estão registados")
@@ -343,11 +345,10 @@ def menu_administracao():
         else:
             print("Opção inválida.")
 
-
 # ---------- Acesso restrito ----------
 
 # Hash SHA-256 da palavra-passe de administrador (a palavra-passe em si não é guardada).
-HASH_ADMIN = "COLA_AQUI_O_HASH"
+HASH_ADMIN = "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918"
 
 
 def verificar_admin():
