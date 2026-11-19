@@ -78,7 +78,7 @@ def obter_ou_criar_dono(conn, nome):
 
     linha = conn.execute(
         """
-        SELECT id, telefone, morada, contacto
+        SELECT id, contacto, email, morada
         FROM donos
         WHERE nome = ?
         """,
