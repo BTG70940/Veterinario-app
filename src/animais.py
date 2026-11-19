@@ -719,6 +719,7 @@ def menu():
             print("5. Registar vacina")
             print("6. Consultar situação atual de um animal")
             print("7. Exportar ficha de um animal em PDF")
+            print("8. Atualizar animal")
             print("0. Sair")
             opcao = input("Opção: ").strip()
 
@@ -737,6 +738,8 @@ def menu():
                 consultar_situacao(conn)
             elif opcao == "7":
                 exportar_pdf(conn)
+            elif opcao == "8":
+                atualizar_animal(conn)
             elif opcao == "0":
                 print("Até logo!")
                 break
