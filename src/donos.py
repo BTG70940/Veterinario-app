@@ -28,12 +28,14 @@ def adicionar_dono():
 
 def listar_donos():
     """Mostra todos os donos registados."""
-    donos = db.consultar("SELECT id, nome, contacto, email FROM donos ORDER BY nome")
+    donos = db.consultar(
+        "SELECT id, nome, contacto, email FROM donos ORDER BY nome")
     if not donos:
         print("Ainda não há donos registados.")
         return
     for dono in donos:
-        print(f"[{dono['id']}] {dono['nome']} | {dono['contacto']} | {dono['email'] or '—'}")
+        print(
+            f"[{dono['id']}] {dono['nome']} | {dono['contacto']} | {dono['email'] or '—'}")
 
 
 def menu_donos():
@@ -42,6 +44,7 @@ def menu_donos():
         print("\n--- Donos ---")
         print("1. Registar dono")
         print("2. Listar donos")
+        print("3. Atualizar dono")
         print("0. Voltar")
         opcao = input("Escolhe uma opção: ").strip()
 
@@ -53,3 +56,36 @@ def menu_donos():
             break
         else:
             print("Opção inválida.")
+
+
+def atualizar_dono():
+    """Altera os dados de um dono existente."""
+    listar_donos()
+    id_dono = input("Id do dono a atualizar: ").strip()
+    if not id_dono.isdigit():
+        print("Id inválido.")
+        return
+
+    linhas = db.consultar("SELECT * FROM donos WHERE id = ?", (int(id_dono),))
+    if not linhas:
+        print("Dono não encontrado.")
+        return
+
+    dono = linhas[0]
+    print("Deixa em branco para manter o valor atual.")
+    nome = input(f"Nome [{dono['nome']}]: ").strip() or dono["nome"]
+    contacto = input(
+        f"Contacto [{dono['contacto']}]: ").strip() or dono["contacto"]
+    email = input(f"Email [{dono['email'] or '—'}]: ").strip() or dono["email"]
+    morada = input(
+        f"Morada [{dono['morada'] or '—'}]: ").strip() or dono["morada"]
+
+    try:
+        db.executar(
+            "UPDATE donos SET nome = ?, contacto = ?, email = ?, morada = ? WHERE id = ?",
+            (nome, contacto, email, morada, int(id_dono)),
+        )
+    except sqlite3.IntegrityError:
+        print("Já existe outro dono com esse nome e contacto.")
+        return
+    print("Dono atualizado.")
