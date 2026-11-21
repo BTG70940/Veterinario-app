@@ -41,6 +41,7 @@ def menu_autenticacao():
 def main():
     db.criar_tabelas()
     db.criar_tabela_colaboradores()
+    db.criar_tabela_marcacoes()
     menu_autenticacao()
     menu_principal(USER_LOGADO)
 

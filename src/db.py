@@ -310,3 +310,25 @@ def criar_tabela_colaboradores():
         )
         """
     )        
+
+
+# ---------- Marcação de consultas (story 9) ----------
+
+def criar_tabela_marcacoes():
+    """
+    Cria a tabela das consultas marcadas pelos donos, caso não exista.
+    Se o médico for eliminado, a marcação fica sem médico (ON DELETE SET NULL).
+    """
+    executar(
+        """
+        CREATE TABLE IF NOT EXISTS marcacoes (
+            id             INTEGER PRIMARY KEY AUTOINCREMENT,
+            animal_id      INTEGER NOT NULL REFERENCES animais(id),
+            data_hora      TEXT NOT NULL,
+            motivo         TEXT NOT NULL,
+            colaborador_id INTEGER REFERENCES colaboradores(id) ON DELETE SET NULL,
+            estado         TEXT NOT NULL DEFAULT 'marcada'
+                           CHECK (estado IN ('marcada', 'cancelada'))
+        )
+        """
+    )
