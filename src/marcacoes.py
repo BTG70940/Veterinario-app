@@ -191,3 +191,25 @@ def cancelar_marcacao(dono_id):
         return
     db.executar("UPDATE marcacoes SET estado = 'cancelada' WHERE id = ?", (int(valor),))
     print("Marcação cancelada.")
+
+
+def menu_marcacoes(dono_id):
+    """Submenu de marcação de consultas."""
+    while True:
+        print("\n--- Consultas ---")
+        print("1. Marcar consulta")
+        print("2. Ver as minhas marcações")
+        print("3. Cancelar marcação")
+        print("0. Voltar")
+        opcao = input("Escolhe uma opção: ").strip()
+
+        if opcao == "1":
+            marcar_consulta(dono_id)
+        elif opcao == "2":
+            listar_marcacoes(dono_id)
+        elif opcao == "3":
+            cancelar_marcacao(dono_id)
+        elif opcao == "0":
+            break
+        else:
+            print("Opção inválida.")
