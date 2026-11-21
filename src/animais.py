@@ -285,6 +285,8 @@ def pesquisar_animais(conn):
  
  
 def registar_consulta(conn):
+    """Regista uma consulta de um animal e, se existir, a doença identificada."""
+    
     print("\n--- Nova consulta ---")
     animal = escolher_animal(conn)
     if not animal:
