@@ -185,6 +185,132 @@ def menu_fornecedores():
         else:
             print("Opção inválida.")
 
+# ---------- Médicos e colaboradores (story 18) ----------
+
+FUNCOES = (db.FUNCAO_MEDICO, "Enfermeiro", "Auxiliar", "Rececionista", "Outro")
+
+
+def _pedir_funcao(atual=None):
+    """
+    Mostra a lista de funções e pede uma ao utilizador.
+
+    Parâmetros:
+        atual (str | None): função atual; se for dada, deixar vazio mantém-na.
+
+    Retorna:
+        str: a função escolhida.
+    """
+    for i, funcao in enumerate(FUNCOES, start=1):
+        print(f"  {i}. {funcao}")
+    while True:
+        sufixo = f" [{atual}]" if atual else ""
+        valor = input(f"Função{sufixo}: ").strip()
+        if not valor and atual:
+            return atual
+        if valor.isdigit() and 1 <= int(valor) <= len(FUNCOES):
+            return FUNCOES[int(valor) - 1]
+        print("Escolhe um número da lista.")
+
+
+def listar_colaboradores():
+    """Mostra os colaboradores e devolve a lista (vazia se não houver)."""
+    linhas = db.consultar("SELECT * FROM colaboradores ORDER BY funcao, nome")
+    if not linhas:
+        print("Ainda não há colaboradores registados.")
+        return []
+    for c in linhas:
+        especialidade = f" ({c['especialidade']})" if c["especialidade"] else ""
+        print(
+            f"[{c['id']}] {c['nome']} | {c['funcao']}{especialidade} | "
+            f"{c['contacto'] or '—'} | {c['email'] or '—'}"
+        )
+    return linhas
+
+
+def registar_colaborador():
+    """Pede os dados e regista um novo médico ou colaborador."""
+    print("\n--- Novo colaborador ---")
+    nome = animais.pedir_texto("Nome: ")
+    funcao = _pedir_funcao()
+    especialidade = animais.pedir_texto(
+        "Especialidade (opcional): ", obrigatorio=False) or None
+    contacto = animais.pedir_texto("Contacto (opcional): ", obrigatorio=False) or None
+    email = animais.pedir_texto("Email (opcional): ", obrigatorio=False) or None
+    id_c = db.executar(
+        "INSERT INTO colaboradores (nome, funcao, especialidade, contacto, email) "
+        "VALUES (?, ?, ?, ?, ?)",
+        (nome, funcao, especialidade, contacto, email),
+    )
+    print(f"Colaborador registado com o id {id_c}.")
+
+
+def atualizar_colaborador():
+    """
+    Altera as informações de um médico ou colaborador (story 18).
+    Deixar um campo em branco mantém o valor atual.
+    """
+    if not listar_colaboradores():
+        return
+    id_c = _pedir_id("Id do colaborador a atualizar: ")
+    linhas = db.consultar("SELECT * FROM colaboradores WHERE id = ?", (id_c,)) if id_c else []
+    if not linhas:
+        print("Colaborador não encontrado.")
+        return
+    c = linhas[0]
+    print("Deixa em branco para manter o valor atual.")
+    nome = input(f"Nome [{c['nome']}]: ").strip() or c["nome"]
+    funcao = _pedir_funcao(c["funcao"])
+    especialidade = input(
+        f"Especialidade [{c['especialidade'] or '—'}]: ").strip() or c["especialidade"]
+    contacto = input(f"Contacto [{c['contacto'] or '—'}]: ").strip() or c["contacto"]
+    email = input(f"Email [{c['email'] or '—'}]: ").strip() or c["email"]
+    db.executar(
+        "UPDATE colaboradores SET nome = ?, funcao = ?, especialidade = ?, "
+        "contacto = ?, email = ? WHERE id = ?",
+        (nome, funcao, especialidade, contacto, email, c["id"]),
+    )
+    print("Colaborador atualizado.")
+
+
+def eliminar_colaborador():
+    """Elimina um colaborador, depois de pedir confirmação."""
+    if not listar_colaboradores():
+        return
+    id_c = _pedir_id("Id do colaborador a eliminar: ")
+    linhas = db.consultar("SELECT * FROM colaboradores WHERE id = ?", (id_c,)) if id_c else []
+    if not linhas:
+        print("Colaborador não encontrado.")
+        return
+    if input(f"Eliminar '{linhas[0]['nome']}'? (s/n): ").strip().lower() != "s":
+        print("Cancelado.")
+        return
+    db.executar("DELETE FROM colaboradores WHERE id = ?", (id_c,))
+    print("Colaborador eliminado.")
+
+
+def menu_colaboradores():
+    """Submenu de gestão de médicos e colaboradores."""
+    while True:
+        print("\n--- Médicos e colaboradores ---")
+        print("1. Registar colaborador")
+        print("2. Listar colaboradores")
+        print("3. Atualizar colaborador")
+        print("4. Eliminar colaborador")
+        print("0. Voltar")
+        opcao = input("Escolhe uma opção: ").strip()
+
+        if opcao == "1":
+            registar_colaborador()
+        elif opcao == "2":
+            listar_colaboradores()
+        elif opcao == "3":
+            atualizar_colaborador()
+        elif opcao == "4":
+            eliminar_colaborador()
+        elif opcao == "0":
+            break
+        else:
+            print("Opção inválida.")
 
 # ---------- Produtos ----------
 
@@ -322,6 +448,7 @@ def menu_administracao():
         print("4. Listar todos os donos")
         print("5. Gerir fornecedores")
         print("6. Gerir produtos")
+        print("7. Gerir médicos e colaboradores")
         print("0. Voltar")
         opcao = input("Escolhe uma opção: ").strip()
 
@@ -337,6 +464,8 @@ def menu_administracao():
             menu_fornecedores()
         elif opcao == "6":
             menu_produtos()
+        elif opcao == "7":
+            menu_colaboradores()
         elif opcao == "0":
             break
         else:

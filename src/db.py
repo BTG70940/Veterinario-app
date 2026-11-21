@@ -292,3 +292,21 @@ def obter_doencas_por_animal(animal_id):
 
     finally:
         conn.close()
+
+
+FUNCAO_MEDICO = "Médico veterinário"
+
+def criar_tabela_colaboradores():
+    """Cria a tabela dos médicos e outros colaboradores da clínica, caso não exista."""
+    executar(
+        """
+        CREATE TABLE IF NOT EXISTS colaboradores (
+            id            INTEGER PRIMARY KEY AUTOINCREMENT,
+            nome          TEXT NOT NULL,
+            funcao        TEXT NOT NULL,
+            especialidade TEXT,
+            contacto      TEXT,
+            email         TEXT
+        )
+        """
+    )        
