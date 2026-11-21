@@ -48,6 +48,7 @@
  | <a href="#O"><strong>O</strong></a>
  | <a href="#P"><strong>P</strong></a>
  | <a href="#R"><strong>R</strong></a>
+ | <a href="#T"><strong>T</strong></a>
  | <a href="#U"><strong>U</strong></a>
  | <a href="#V"><strong>V</strong></a>
  
@@ -71,6 +72,8 @@
         <li><a href="api/animais.html#module-animais">module</a>
 </li>
       </ul></li>
+      <li><a href="api/db.html#db.apagar_dados_animais">apagar_dados_animais() (no módulo db)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/animais.html#animais.atualizar_animal">atualizar_animal() (no módulo animais)</a>
@@ -93,6 +96,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/animais.html#animais.calcular_idade">calcular_idade() (no módulo animais)</a>
 </li>
+      <li><a href="api/marcacoes.html#marcacoes.cancelar_marcacao">cancelar_marcacao() (no módulo marcacoes)</a>
+</li>
       <li><a href="api/db.html#db.consultar">consultar() (no módulo db)</a>
 </li>
       <li><a href="api/animais.html#animais.consultar_situacao">consultar_situacao() (no módulo animais)</a>
@@ -102,6 +107,8 @@
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/db.html#db.criar_tabela_colaboradores">criar_tabela_colaboradores() (no módulo db)</a>
+</li>
+      <li><a href="api/db.html#db.criar_tabela_marcacoes">criar_tabela_marcacoes() (no módulo db)</a>
 </li>
       <li><a href="api/animais.html#animais.criar_tabelas">criar_tabelas() (no módulo animais)</a>
 
@@ -139,14 +146,20 @@
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/animais.html#animais.eliminar_animal">eliminar_animal() (no módulo animais)</a>
+</li>
       <li><a href="api/administracao.html#administracao.eliminar_colaborador">eliminar_colaborador() (no módulo administracao)</a>
 </li>
+      <li><a href="api/donos.html#donos.eliminar_conta">eliminar_conta() (no módulo donos)</a>
+</li>
+      <li><a href="api/db.html#db.eliminar_dono">eliminar_dono() (no módulo db)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/administracao.html#administracao.eliminar_fornecedor">eliminar_fornecedor() (no módulo administracao)</a>
 </li>
       <li><a href="api/administracao.html#administracao.eliminar_produto">eliminar_produto() (no módulo administracao)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/animais.html#animais.escolher_animal">escolher_animal() (no módulo animais)</a>
 </li>
       <li><a href="api/db.html#db.executar">executar() (no módulo db)</a>
@@ -220,6 +233,8 @@
 </li>
       <li><a href="api/administracao.html#administracao.listar_fornecedores">listar_fornecedores() (no módulo administracao)</a>
 </li>
+      <li><a href="api/marcacoes.html#marcacoes.listar_marcacoes">listar_marcacoes() (no módulo marcacoes)</a>
+</li>
       <li><a href="api/administracao.html#administracao.listar_produtos">listar_produtos() (no módulo administracao)</a>
 </li>
       <li><a href="api/administracao.html#administracao.listar_todos_animais">listar_todos_animais() (no módulo administracao)</a>
@@ -238,6 +253,15 @@
 </li>
       </ul></li>
       <li><a href="api/main.html#main.main">main() (no módulo main)</a>
+</li>
+      <li>
+    marcacoes
+
+      <ul>
+        <li><a href="api/marcacoes.html#module-marcacoes">module</a>
+</li>
+      </ul></li>
+      <li><a href="api/marcacoes.html#marcacoes.marcar_consulta">marcar_consulta() (no módulo marcacoes)</a>
 </li>
       <li>
     menu
@@ -260,10 +284,12 @@
 </li>
       <li><a href="api/historicos.html#historicos.menu.menu_historicos">menu_historicos() (no módulo historicos.menu)</a>
 </li>
-      <li><a href="api/menu.html#menu.menu_principal">menu_principal() (no módulo menu)</a>
+      <li><a href="api/marcacoes.html#marcacoes.menu_marcacoes">menu_marcacoes() (no módulo marcacoes)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/menu.html#menu.menu_principal">menu_principal() (no módulo menu)</a>
+</li>
       <li><a href="api/administracao.html#administracao.menu_produtos">menu_produtos() (no módulo administracao)</a>
 </li>
       <li>
@@ -285,6 +311,8 @@
         <li><a href="api/historicos.html#module-historicos.menu">historicos.menu</a>
 </li>
         <li><a href="api/main.html#module-main">main</a>
+</li>
+        <li><a href="api/marcacoes.html#module-marcacoes">marcacoes</a>
 </li>
         <li><a href="api/menu.html#module-menu">menu</a>
 </li>
@@ -366,6 +394,14 @@
       <li><a href="api/administracao.html#administracao.registar_produto">registar_produto() (no módulo administracao)</a>
 </li>
       <li><a href="api/animais.html#animais.registar_vacina">registar_vacina() (no módulo animais)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="T">T</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/db.html#db.tabela_existe">tabela_existe() (no módulo db)</a>
 </li>
   </ul></td>
 </tr></table>
