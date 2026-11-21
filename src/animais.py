@@ -231,6 +231,8 @@ def escolher_animal(conn):
 # ---------- Funcionalidades ----------
  
 def registar_animal(conn):
+    """Pede os dados do animal e do dono e guarda o animal"""
+    
     print("\n--- Novo animal ---")
     nome = pedir_texto("Nome: ")
     especie = pedir_texto("Espécie (cão, gato...): ")
