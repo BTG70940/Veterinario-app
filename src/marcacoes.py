@@ -83,3 +83,52 @@ def _escolher_medico():
             if valor.isdigit() and m["id"] == int(valor):
                 return m["id"]
         print("Médico não encontrado.")
+
+
+def marcar_consulta(dono_id):
+    """
+    Formulário para marcar uma consulta para um animal do dono.
+    Recusa a marcação se o médico ou o animal já tiverem consulta a essa hora.
+    """
+    print("\n--- Marcar consulta ---")
+    animal = _escolher_animal_do_dono(dono_id)
+    if not animal:
+        return
+
+    while True:
+        quando = _pedir_data_hora()
+        if quando is None:
+            print("Marcação cancelada.")
+            return
+        medico_id = _escolher_medico()
+        data_hora = quando.strftime(FORMATO_BD)
+
+        if medico_id and db.consultar(
+            "SELECT 1 FROM marcacoes WHERE colaborador_id = ? AND data_hora = ? "
+            "AND estado = 'marcada'",
+            (medico_id, data_hora),
+        ):
+            print("Esse médico já tem uma consulta a essa hora. Escolhe outra hora.")
+            continue
+        if db.consultar(
+            "SELECT 1 FROM marcacoes WHERE animal_id = ? AND data_hora = ? "
+            "AND estado = 'marcada'",
+            (animal["id"], data_hora),
+        ):
+            print(f"O {animal['nome']} já tem uma consulta a essa hora.")
+            continue
+        break
+
+    motivo = input("Motivo da consulta: ").strip()
+    while not motivo:
+        motivo = input("O motivo é obrigatório. Motivo da consulta: ").strip()
+
+    id_marcacao = db.executar(
+        "INSERT INTO marcacoes (animal_id, data_hora, motivo, colaborador_id) "
+        "VALUES (?, ?, ?, ?)",
+        (animal["id"], data_hora, motivo, medico_id),
+    )
+    print(
+        f"Consulta marcada (n.º {id_marcacao}) para o {animal['nome']} "
+        f"em {quando.strftime(FORMATO_ECRA)}."
+    )
