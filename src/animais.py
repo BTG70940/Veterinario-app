@@ -11,6 +11,15 @@ FICHEIRO_JSON = "animais.json"  # usado apenas para importar dados antigos
 # ---------- Base de dados ----------
  
 def ligar():
+    """Abre uma ligação à base de dados SQLite.
+    
+    Configura o acesso às colunas por nome e ativa a verificação de chaves
+    estrangeiras.
+    
+    Returns:
+        sqlite3.Connection: Ligação aberta à base de dados definida em
+            ``BASE_DADOS``.
+    """
     conn = sqlite3.connect(BASE_DADOS)
     conn.row_factory = sqlite3.Row  # permite aceder às colunas por nome
     conn.execute("PRAGMA foreign_keys = ON")
