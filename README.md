@@ -186,3 +186,42 @@ erDiagram
         TEXT notas
     }
 ```
+
+## Funcionalidades: marcações, colaboradores e eliminação de dados
+
+| Story | Onde está no menu | Ficheiros |
+|---|---|---|
+| 9 – Marcar consulta | 3. Consultas | `src/marcacoes.py`, `src/db.py` |
+| 16 – Eliminar a minha conta | 6. Eliminar a minha conta | `src/donos.py`, `src/db.py` |
+| 17 – Eliminar o meu animal | 2. Animais → 9 | `src/animais.py`, `src/db.py` |
+| 18 – Gerir médicos e colaboradores | 5. Administração → 7 | `src/administracao.py`, `src/db.py` |
+
+#### Tabela `colaboradores`
+
+| Campo | Tipo de dados | Restrições | Descrição |
+|---|---|---|---|
+| `id` | INTEGER | PRIMARY KEY, AUTOINCREMENT | Identificador único do colaborador |
+| `nome` | TEXT | NOT NULL | Nome do colaborador |
+| `funcao` | TEXT | NOT NULL | Médico veterinário, Enfermeiro, Auxiliar, Rececionista ou Outro |
+| `especialidade` | TEXT | — | Especialidade (ex.: cirurgia) |
+| `contacto` | TEXT | — | Número de contacto |
+| `email` | TEXT | — | Endereço de email |
+
+#### Tabela `marcacoes`
+
+| Campo | Tipo de dados | Restrições | Descrição |
+|---|---|---|---|
+| `id` | INTEGER | PRIMARY KEY, AUTOINCREMENT | Identificador único da marcação |
+| `animal_id` | INTEGER | NOT NULL, FOREIGN KEY | Animal da consulta |
+| `data_hora` | TEXT | NOT NULL | Data e hora (AAAA-MM-DD HH:MM) |
+| `motivo` | TEXT | NOT NULL | Motivo da consulta |
+| `colaborador_id` | INTEGER | FOREIGN KEY, ON DELETE SET NULL | Médico escolhido (opcional) |
+| `estado` | TEXT | NOT NULL, `marcada` ou `cancelada` | Estado da marcação |
+
+**Regras:**
+- Só se podem marcar consultas para datas futuras.
+- Um médico (e um animal) não pode ter duas consultas marcadas à mesma hora.
+- Cancelar uma marcação não a apaga: o estado passa a `cancelada`.
+- Eliminar um animal apaga também as suas consultas, doenças, vacinas, medicamentos e marcações.
+- Eliminar a conta apaga o dono e todos os seus animais (com os dados acima).
+- Se um colaborador for eliminado, as suas marcações ficam sem médico atribuído.
