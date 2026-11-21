@@ -39,6 +39,7 @@ def menu_autenticacao():
 
 
 def main():
+    """Cria as tabelas, faz o login ou registo e abre o menu principal."""
     db.criar_tabelas()
     db.criar_tabela_colaboradores()
     db.criar_tabela_marcacoes()
