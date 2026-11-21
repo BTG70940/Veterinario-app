@@ -7,6 +7,7 @@ from datetime import date, datetime
 from xml.sax.saxutils import escape
 
 from donos import adicionar_dono
+import db
 
 BASE_DADOS = "veterinario.db"
 FICHEIRO_JSON = "animais.json"  # usado apenas para importar dados antigos
@@ -704,7 +705,38 @@ def atualizar_animal(conn):
     print("Animal atualizado.")
 
 
-def menu():
+def eliminar_animal(conn, dono_id):
+    """
+    Elimina um animal do dono autenticado e todo o seu historial (story 17).
+    Só deixa escolher animais que pertencem a esse dono.
+    """
+    print("\n--- Eliminar animal ---")
+    meus = conn.execute(
+        "SELECT id, nome, especie FROM animais WHERE dono_id = ? ORDER BY nome",
+        (dono_id,),
+    ).fetchall()
+    if not meus:
+        print("Não tens animais registados.")
+        return
+    for a in meus:
+        print(f"  [{a['id']}] {a['nome']} ({a['especie']})")
+    valor = input("Id do animal a eliminar: ").strip()
+    animal = next((a for a in meus if valor.isdigit() and a["id"] == int(valor)), None)
+    if not animal:
+        print("Esse animal não existe ou não é teu.")
+        return
+
+    print(f"ATENÇÃO: vais apagar o {animal['nome']} e todo o seu historial")
+    print("(consultas, vacinas, doenças, medicamentos e marcações).")
+    if input("Tens a certeza? (s/n): ").strip().lower() != "s":
+        print("Cancelado.")
+        return
+    with conn:
+        db.apagar_dados_animais(conn, [animal["id"]])
+    print(f"O registo do {animal['nome']} foi eliminado.")
+
+
+def menu(dono_id=None):
     conn = ligar()
     criar_tabelas(conn)
     atualizar_esquema(conn)
@@ -720,6 +752,8 @@ def menu():
             print("6. Consultar situação atual de um animal")
             print("7. Exportar ficha de um animal em PDF")
             print("8. Atualizar animal")
+            if dono_id:
+                print("9. Eliminar um animal meu")
             print("0. Sair")
             opcao = input("Opção: ").strip()
 
@@ -740,6 +774,8 @@ def menu():
                 exportar_pdf(conn)
             elif opcao == "8":
                 atualizar_animal(conn)
+            elif opcao == "9" and dono_id:
+                eliminar_animal(conn, dono_id)
             elif opcao == "0":
                 print("Até logo!")
                 break
