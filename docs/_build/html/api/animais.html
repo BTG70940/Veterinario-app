@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+
+<html lang="pt" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>animais module &#8212; Documentação Veterinário App 1.0</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=27fed22d" />
+    <script src="../_static/documentation_options.js?v=bbb231ee"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/translations.js?v=beaedd51"></script>
+    <link rel="index" title="Índice" href="../genindex.html" />
+    <link rel="search" title="Pesquisar" href="../search.html" />
+    <link rel="next" title="db module" href="db.html" />
+    <link rel="prev" title="administracao module" href="administracao.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-animais">
+<span id="animais-module"></span><h1>animais module<a class="headerlink" href="#module-animais" title="Link to this heading">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="animais.atualizar_animal">
+<span class="sig-prename descclassname"><span class="pre">animais.</span></span><span class="sig-name descname"><span class="pre">atualizar_animal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#animais.atualizar_animal" title="Link to this definition">¶</a></dt>
+<dd><p>Altera os dados de um animal existente.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="animais.atualizar_esquema">
+<span class="sig-prename descclassname"><span class="pre">animais.</span></span><span class="sig-name descname"><span class="pre">atualizar_esquema</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#animais.atualizar_esquema" title="Link to this definition">¶</a></dt>
+<dd><p>Acrescenta colunas que faltem em bases de dados criadas por versões antigas.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="animais.calcular_idade">
+<span class="sig-prename descclassname"><span class="pre">animais.</span></span><span class="sig-name descname"><span class="pre">calcular_idade</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_nascimento</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#animais.calcular_idade" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="animais.consultar_situacao">
+<span class="sig-prename descclassname"><span class="pre">animais.</span></span><span class="sig-name descname"><span class="pre">consultar_situacao</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#animais.consultar_situacao" title="Link to this definition">¶</a></dt>
+<dd><p>Resumo da situação atual do animal: dados, última consulta, vacinas e historial.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="animais.criar_tabelas">
+<span class="sig-prename descclassname"><span class="pre">animais.</span></span><span class="sig-name descname"><span class="pre">criar_tabelas</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#animais.criar_tabelas" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="animais.escolher_animal">
+<span class="sig-prename descclassname"><span class="pre">animais.</span></span><span class="sig-name descname"><span class="pre">escolher_animal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#animais.escolher_animal" title="Link to this definition">¶</a></dt>
+<dd><p>Pede um ID, nome do animal ou nome do dono e devolve o animal escolhido.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="animais.exportar_pdf">
+<span class="sig-prename descclassname"><span class="pre">animais.</span></span><span class="sig-name descname"><span class="pre">exportar_pdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#animais.exportar_pdf" title="Link to this definition">¶</a></dt>
+<dd><p>Gera um PDF com a ficha completa do animal, consultas e vacinas.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="animais.formatar_data">
+<span class="sig-prename descclassname"><span class="pre">animais.</span></span><span class="sig-name descname"><span class="pre">formatar_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iso</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#animais.formatar_data" title="Link to this definition">¶</a></dt>
+<dd><p>AAAA-MM-DD -&gt; DD-MM-AAAA, para mostrar ao utilizador.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="animais.importar_json">
+<span class="sig-prename descclassname"><span class="pre">animais.</span></span><span class="sig-name descname"><span class="pre">importar_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#animais.importar_json" title="Link to this definition">¶</a></dt>
+<dd><p>Se existir um animais.json antigo e a base de dados estiver vazia,
+oferece-se para importar os registos.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="animais.ligar">
+<span class="sig-prename descclassname"><span class="pre">animais.</span></span><span class="sig-name descname"><span class="pre">ligar</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#animais.ligar" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="animais.listar_animais">
+<span class="sig-prename descclassname"><span class="pre">animais.</span></span><span class="sig-name descname"><span class="pre">listar_animais</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#animais.listar_animais" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="animais.menu">
+<span class="sig-prename descclassname"><span class="pre">animais.</span></span><span class="sig-name descname"><span class="pre">menu</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#animais.menu" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="animais.nome_ficheiro_seguro">
+<span class="sig-prename descclassname"><span class="pre">animais.</span></span><span class="sig-name descname"><span class="pre">nome_ficheiro_seguro</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">texto</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#animais.nome_ficheiro_seguro" title="Link to this definition">¶</a></dt>
+<dd><p>“João Pedro” -&gt; “Joao_Pedro” (sem acentos nem caracteres problemáticos).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="animais.obter_consultas">
+<span class="sig-prename descclassname"><span class="pre">animais.</span></span><span class="sig-name descname"><span class="pre">obter_consultas</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">animal_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#animais.obter_consultas" title="Link to this definition">¶</a></dt>
+<dd><p>Todas as consultas de um animal, da mais recente para a mais antiga.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="animais.obter_ou_criar_dono">
+<span class="sig-prename descclassname"><span class="pre">animais.</span></span><span class="sig-name descname"><span class="pre">obter_ou_criar_dono</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nome</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#animais.obter_ou_criar_dono" title="Link to this definition">¶</a></dt>
+<dd><p>Reutiliza o dono se existir; caso contrário, cria um novo.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="animais.obter_vacinas">
+<span class="sig-prename descclassname"><span class="pre">animais.</span></span><span class="sig-name descname"><span class="pre">obter_vacinas</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">animal_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#animais.obter_vacinas" title="Link to this definition">¶</a></dt>
+<dd><p>Todas as vacinas de um animal, da mais recente para a mais antiga.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="animais.pedir_data">
+<span class="sig-prename descclassname"><span class="pre">animais.</span></span><span class="sig-name descname"><span class="pre">pedir_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mensagem</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#animais.pedir_data" title="Link to this definition">¶</a></dt>
+<dd><p>Pede DD-MM-AAAA e devolve AAAA-MM-DD (ou None se vazio).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="animais.pedir_peso">
+<span class="sig-prename descclassname"><span class="pre">animais.</span></span><span class="sig-name descname"><span class="pre">pedir_peso</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mensagem</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#animais.pedir_peso" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="animais.pedir_texto">
+<span class="sig-prename descclassname"><span class="pre">animais.</span></span><span class="sig-name descname"><span class="pre">pedir_texto</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mensagem</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obrigatorio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#animais.pedir_texto" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="animais.pesquisar_animais">
+<span class="sig-prename descclassname"><span class="pre">animais.</span></span><span class="sig-name descname"><span class="pre">pesquisar_animais</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#animais.pesquisar_animais" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="animais.registar_animal">
+<span class="sig-prename descclassname"><span class="pre">animais.</span></span><span class="sig-name descname"><span class="pre">registar_animal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#animais.registar_animal" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="animais.registar_consulta">
+<span class="sig-prename descclassname"><span class="pre">animais.</span></span><span class="sig-name descname"><span class="pre">registar_consulta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#animais.registar_consulta" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="animais.registar_doenca">
+<span class="sig-prename descclassname"><span class="pre">animais.</span></span><span class="sig-name descname"><span class="pre">registar_doenca</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">consulta_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#animais.registar_doenca" title="Link to this definition">¶</a></dt>
+<dd><p>Regista uma doença associada a uma consulta.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="animais.registar_vacina">
+<span class="sig-prename descclassname"><span class="pre">animais.</span></span><span class="sig-name descname"><span class="pre">registar_vacina</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#animais.registar_vacina" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Veterinário App</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Ir" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navegação</h3>
+<p class="caption" role="heading"><span class="caption-text">Código fonte</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">src</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="administracao.html">administracao module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">animais module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="db.html">db module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="donos.html">donos module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="historicos.html">historicos package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="main.html">main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="menu.html">menu module</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">src</a><ul>
+      <li>Previous: <a href="administracao.html" title="capítulo anterior">administracao module</a></li>
+      <li>Next: <a href="db.html" title="próximo capítulo">db module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2026, Grupo H.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.2.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../_sources/api/animais.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
