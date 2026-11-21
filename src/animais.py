@@ -74,6 +74,7 @@ def criar_tabelas(conn):
  
  
 def obter_ou_criar_dono(conn, nome, contacto):
+    
     """Reutiliza o dono se já existir (mesmo nome e contacto), senão cria."""
     linha = conn.execute(
         "SELECT id FROM donos WHERE nome = ? AND contacto = ?", (nome, contacto)
@@ -136,6 +137,18 @@ def pedir_data(mensagem):
  
  
 def pedir_peso(mensagem):
+    """Pede um peso positivo em quilogramas.
+    
+    Aceita vírgula ou ponto como separador decimal. Repete a pergunta se
+    o valor não for numérico ou não for positivo; uma resposta vazia é
+    aceite.
+    
+    Args:
+        mensagem (str): Texto apresentado ao utilizador.
+    
+    Returns:
+        float | None: Peso introduzido ou ``None`` se o campo ficar vazio.
+    """
     while True:
         valor = input(mensagem).strip().replace(",", ".")
         if not valor:
