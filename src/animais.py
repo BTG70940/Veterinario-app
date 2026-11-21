@@ -27,6 +27,18 @@ def ligar():
  
  
 def criar_tabelas(conn):
+    """Cria as tabelas da aplicação caso ainda não existam.
+    
+    Cria as tabelas ``donos``, ``animais`` e ``consultas``, incluindo as
+    chaves estrangeiras e as restrições definidas no esquema.
+    
+    Args:
+        conn (sqlite3.Connection): Ligação à base de dados onde as tabelas
+            serão criadas.
+    
+    Returns:
+        None
+    """
     with conn:
         conn.executescript("""
             CREATE TABLE IF NOT EXISTS donos (
