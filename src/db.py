@@ -376,3 +376,19 @@ def apagar_dados_animais(ligacao, ids_animais):
         if tabela_existe(ligacao, tabela):
             ligacao.execute(
                 f"DELETE FROM {tabela} WHERE {coluna} IN ({marcadores})", ids)
+
+
+def eliminar_dono(dono_id):
+    """
+    Apaga o dono, os seus animais e todos os dados associados (story 16).
+    É tudo feito numa só transação: ou apaga tudo, ou não apaga nada.
+    """
+    ligacao = ligar()
+    try:
+        with ligacao:
+            ids = [linha["id"] for linha in ligacao.execute(
+                "SELECT id FROM animais WHERE dono_id = ?", (dono_id,))]
+            apagar_dados_animais(ligacao, ids)
+            ligacao.execute("DELETE FROM donos WHERE id = ?", (dono_id,))
+    finally:
+        ligacao.close()

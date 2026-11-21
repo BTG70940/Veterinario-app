@@ -48,6 +48,7 @@ def menu_principal(USER_LOGADO):
         print("3. Consultas")
         print("4. Históricos")
         print("5. Administração")
+        print("6. Eliminar a minha conta")
         print("0. Sair")
         opcao = input("Escolhe uma opção: ").strip()
 
@@ -61,6 +62,10 @@ def menu_principal(USER_LOGADO):
             menu.menu_historicos(USER_LOGADO)  # stories 10, 11
         elif opcao == "5":
             administracao.menu_administracao()  # stories 8, 14
+        elif opcao == "6":
+            if donos.eliminar_conta(USER_LOGADO):  # story 16
+                print("Sessão terminada.")
+                break
         elif opcao == "0":
             print("Até breve!")
             break

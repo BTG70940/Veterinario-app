@@ -58,6 +58,35 @@ def menu_donos():
             print("Opção inválida.")
 
 
+def eliminar_conta(dono_id):
+    """
+    Apaga a conta do dono autenticado e todos os seus dados (story 16).
+    Pede para escrever ELIMINAR como confirmação.
+
+    Retorna:
+        bool: True se a conta foi eliminada.
+    """
+    linhas = db.consultar("SELECT nome FROM donos WHERE id = ?", (dono_id,))
+    if not linhas:
+        print("Conta não encontrada.")
+        return False
+    total = db.consultar(
+        "SELECT COUNT(*) AS n FROM animais WHERE dono_id = ?", (dono_id,))[0]["n"]
+
+    print("\n--- Eliminar a minha conta ---")
+    print(f"ATENÇÃO: vais apagar permanentemente a conta de {linhas[0]['nome']},")
+    print(f"os teus {total} animal(is) e todo o historial deles")
+    print("(consultas, vacinas, doenças, medicamentos e marcações).")
+    print("Esta ação não pode ser desfeita.")
+    if input("Escreve ELIMINAR para confirmar: ").strip() != "ELIMINAR":
+        print("Cancelado. A tua conta não foi alterada.")
+        return False
+
+    db.eliminar_dono(dono_id)
+    print("A tua conta e todos os teus dados foram eliminados.")
+    return True
+
+
 def atualizar_dono():
     """Altera os dados de um dono existente."""
     listar_donos()
