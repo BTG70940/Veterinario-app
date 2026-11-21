@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+
+<html lang="pt" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>db module &#8212; Documentação Veterinário App 1.0</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=27fed22d" />
+    <script src="../_static/documentation_options.js?v=bbb231ee"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/translations.js?v=beaedd51"></script>
+    <link rel="index" title="Índice" href="../genindex.html" />
+    <link rel="search" title="Pesquisar" href="../search.html" />
+    <link rel="next" title="donos module" href="donos.html" />
+    <link rel="prev" title="animais module" href="animais.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-db">
+<span id="db-module"></span><h1>db module<a class="headerlink" href="#module-db" title="Link to this heading">¶</a></h1>
+<p>Ligação à base de dados SQLite da aplicação.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="db.consultar">
+<span class="sig-prename descclassname"><span class="pre">db.</span></span><span class="sig-name descname"><span class="pre">consultar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sql</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parametros</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db.consultar" title="Link to this definition">¶</a></dt>
+<dd><p>Executa um SELECT e devolve todas as linhas.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="db.criar_tabela_colaboradores">
+<span class="sig-prename descclassname"><span class="pre">db.</span></span><span class="sig-name descname"><span class="pre">criar_tabela_colaboradores</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#db.criar_tabela_colaboradores" title="Link to this definition">¶</a></dt>
+<dd><p>Cria a tabela dos médicos e outros colaboradores da clínica, caso não exista.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="db.criar_tabelas">
+<span class="sig-prename descclassname"><span class="pre">db.</span></span><span class="sig-name descname"><span class="pre">criar_tabelas</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#db.criar_tabelas" title="Link to this definition">¶</a></dt>
+<dd><p>Cria as tabelas da aplicação, caso ainda não existam.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="db.executar">
+<span class="sig-prename descclassname"><span class="pre">db.</span></span><span class="sig-name descname"><span class="pre">executar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sql</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parametros</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db.executar" title="Link to this definition">¶</a></dt>
+<dd><p>Executa INSERT, UPDATE ou DELETE. Devolve o id da última linha inserida.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="db.ligar">
+<span class="sig-prename descclassname"><span class="pre">db.</span></span><span class="sig-name descname"><span class="pre">ligar</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#db.ligar" title="Link to this definition">¶</a></dt>
+<dd><p>Abre uma ligação à base de dados e devolve-a.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="db.obter_animais_a_tomar_medicacao">
+<span class="sig-prename descclassname"><span class="pre">db.</span></span><span class="sig-name descname"><span class="pre">obter_animais_a_tomar_medicacao</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dono_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db.obter_animais_a_tomar_medicacao" title="Link to this definition">¶</a></dt>
+<dd><p>Devolve uma lista de animais do dono indicado que têm medicação registada.</p>
+<dl class="simple">
+<dt>Parâmetros:</dt><dd><p>dono_id (int): ID do dono.</p>
+</dd>
+<dt>Retorna:</dt><dd><dl class="simple">
+<dt>list[dict]: lista de animais com os campos</dt><dd><p>id, nome, especie, raca, nome_medicamento e quantidade.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="db.obter_doencas_por_animal">
+<span class="sig-prename descclassname"><span class="pre">db.</span></span><span class="sig-name descname"><span class="pre">obter_doencas_por_animal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">animal_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db.obter_doencas_por_animal" title="Link to this definition">¶</a></dt>
+<dd><p>Devolve todas as doenças associadas aos animais indicados.</p>
+<dl class="simple">
+<dt>Retorna:</dt><dd><dl class="simple">
+<dt>list[dict]: lista de doenças com os campos</dt><dd><p>id, nome, descricao, consulta_id,
+id_animal, nome_animal e data.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="db.obter_id_animais_por_dono">
+<span class="sig-prename descclassname"><span class="pre">db.</span></span><span class="sig-name descname"><span class="pre">obter_id_animais_por_dono</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dono</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db.obter_id_animais_por_dono" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="db.obter_id_dono">
+<span class="sig-prename descclassname"><span class="pre">db.</span></span><span class="sig-name descname"><span class="pre">obter_id_dono</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nome</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db.obter_id_dono" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="db.obter_medicamentos_por_animal">
+<span class="sig-prename descclassname"><span class="pre">db.</span></span><span class="sig-name descname"><span class="pre">obter_medicamentos_por_animal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">animal_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db.obter_medicamentos_por_animal" title="Link to this definition">¶</a></dt>
+<dd><p>Devolve uma lista única com todos os medicamentos
+associados aos animais indicados.</p>
+<dl class="simple">
+<dt>Parâmetros:</dt><dd><p>caminho_bd (str): caminho para a base de dados SQLite.
+animal_id (list): lista com os IDs dos animais.</p>
+</dd>
+<dt>Retorna:</dt><dd><dl class="simple">
+<dt>list[dict]: lista de medicamentos com os campos</dt><dd><p>id, nome_medicamento, quantidade e id_animal.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="db.utilizador_existe">
+<span class="sig-prename descclassname"><span class="pre">db.</span></span><span class="sig-name descname"><span class="pre">utilizador_existe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nome</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db.utilizador_existe" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Veterinário App</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Ir" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navegação</h3>
+<p class="caption" role="heading"><span class="caption-text">Código fonte</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">src</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="administracao.html">administracao module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="animais.html">animais module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">db module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="donos.html">donos module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="historicos.html">historicos package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="main.html">main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="menu.html">menu module</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">src</a><ul>
+      <li>Previous: <a href="animais.html" title="capítulo anterior">animais module</a></li>
+      <li>Next: <a href="donos.html" title="próximo capítulo">donos module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2026, Grupo H.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.2.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../_sources/api/db.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
