@@ -16,7 +16,7 @@
     <link rel="index" title="Índice" href="../genindex.html" />
     <link rel="search" title="Pesquisar" href="../search.html" />
     <link rel="next" title="administracao module" href="administracao.html" />
-    <link rel="prev" title="Veterinário App documentation" href="../index.html" />
+    <link rel="prev" title="Veterinário App" href="../index.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
@@ -68,6 +68,7 @@
 <li class="toctree-l2"><a class="reference internal" href="animais.html#animais.calcular_idade"><code class="docutils literal notranslate"><span class="pre">calcular_idade()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="animais.html#animais.consultar_situacao"><code class="docutils literal notranslate"><span class="pre">consultar_situacao()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="animais.html#animais.criar_tabelas"><code class="docutils literal notranslate"><span class="pre">criar_tabelas()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="animais.html#animais.eliminar_animal"><code class="docutils literal notranslate"><span class="pre">eliminar_animal()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="animais.html#animais.escolher_animal"><code class="docutils literal notranslate"><span class="pre">escolher_animal()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="animais.html#animais.exportar_pdf"><code class="docutils literal notranslate"><span class="pre">exportar_pdf()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="animais.html#animais.formatar_data"><code class="docutils literal notranslate"><span class="pre">formatar_data()</span></code></a></li>
@@ -90,9 +91,12 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="db.html">db module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="db.html#db.apagar_dados_animais"><code class="docutils literal notranslate"><span class="pre">apagar_dados_animais()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="db.html#db.consultar"><code class="docutils literal notranslate"><span class="pre">consultar()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="db.html#db.criar_tabela_colaboradores"><code class="docutils literal notranslate"><span class="pre">criar_tabela_colaboradores()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="db.html#db.criar_tabela_marcacoes"><code class="docutils literal notranslate"><span class="pre">criar_tabela_marcacoes()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="db.html#db.criar_tabelas"><code class="docutils literal notranslate"><span class="pre">criar_tabelas()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="db.html#db.eliminar_dono"><code class="docutils literal notranslate"><span class="pre">eliminar_dono()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="db.html#db.executar"><code class="docutils literal notranslate"><span class="pre">executar()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="db.html#db.ligar"><code class="docutils literal notranslate"><span class="pre">ligar()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="db.html#db.obter_animais_a_tomar_medicacao"><code class="docutils literal notranslate"><span class="pre">obter_animais_a_tomar_medicacao()</span></code></a></li>
@@ -100,12 +104,14 @@
 <li class="toctree-l2"><a class="reference internal" href="db.html#db.obter_id_animais_por_dono"><code class="docutils literal notranslate"><span class="pre">obter_id_animais_por_dono()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="db.html#db.obter_id_dono"><code class="docutils literal notranslate"><span class="pre">obter_id_dono()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="db.html#db.obter_medicamentos_por_animal"><code class="docutils literal notranslate"><span class="pre">obter_medicamentos_por_animal()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="db.html#db.tabela_existe"><code class="docutils literal notranslate"><span class="pre">tabela_existe()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="db.html#db.utilizador_existe"><code class="docutils literal notranslate"><span class="pre">utilizador_existe()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="donos.html">donos module</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="donos.html#donos.adicionar_dono"><code class="docutils literal notranslate"><span class="pre">adicionar_dono()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="donos.html#donos.atualizar_dono"><code class="docutils literal notranslate"><span class="pre">atualizar_dono()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="donos.html#donos.eliminar_conta"><code class="docutils literal notranslate"><span class="pre">eliminar_conta()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="donos.html#donos.listar_donos"><code class="docutils literal notranslate"><span class="pre">listar_donos()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="donos.html#donos.menu_donos"><code class="docutils literal notranslate"><span class="pre">menu_donos()</span></code></a></li>
 </ul>
@@ -182,7 +188,7 @@
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="../index.html" title="capítulo anterior">Veterinário App documentation</a></li>
+      <li>Previous: <a href="../index.html" title="capítulo anterior">Veterinário App</a></li>
       <li>Next: <a href="administracao.html" title="próximo capítulo">administracao module</a></li>
   </ul></li>
 </ul>

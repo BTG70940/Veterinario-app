@@ -38,6 +38,20 @@
 <span id="db-module"></span><h1>db module<a class="headerlink" href="#module-db" title="Link to this heading">¶</a></h1>
 <p>Ligação à base de dados SQLite da aplicação.</p>
 <dl class="py function">
+<dt class="sig sig-object py" id="db.apagar_dados_animais">
+<span class="sig-prename descclassname"><span class="pre">db.</span></span><span class="sig-name descname"><span class="pre">apagar_dados_animais</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ligacao</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ids_animais</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db.apagar_dados_animais" title="Link to this definition">¶</a></dt>
+<dd><p>Apaga os animais indicados e tudo o que depende deles
+(doenças, consultas, vacinas, medicamentos e marcações).</p>
+<p>Não faz commit: deve ser chamada dentro de um <cite>with ligacao:</cite>,
+para que ou se apaga tudo, ou não se apaga nada.</p>
+<dl class="simple">
+<dt>Parâmetros:</dt><dd><p>ligacao (sqlite3.Connection): ligação aberta à base de dados.
+ids_animais (list[int]): IDs dos animais a apagar.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="db.consultar">
 <span class="sig-prename descclassname"><span class="pre">db.</span></span><span class="sig-name descname"><span class="pre">consultar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sql</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parametros</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db.consultar" title="Link to this definition">¶</a></dt>
 <dd><p>Executa um SELECT e devolve todas as linhas.</p>
@@ -50,9 +64,23 @@
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="db.criar_tabela_marcacoes">
+<span class="sig-prename descclassname"><span class="pre">db.</span></span><span class="sig-name descname"><span class="pre">criar_tabela_marcacoes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#db.criar_tabela_marcacoes" title="Link to this definition">¶</a></dt>
+<dd><p>Cria a tabela das consultas marcadas pelos donos, caso não exista.
+Se o médico for eliminado, a marcação fica sem médico (ON DELETE SET NULL).</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="db.criar_tabelas">
 <span class="sig-prename descclassname"><span class="pre">db.</span></span><span class="sig-name descname"><span class="pre">criar_tabelas</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#db.criar_tabelas" title="Link to this definition">¶</a></dt>
 <dd><p>Cria as tabelas da aplicação, caso ainda não existam.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="db.eliminar_dono">
+<span class="sig-prename descclassname"><span class="pre">db.</span></span><span class="sig-name descname"><span class="pre">eliminar_dono</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dono_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db.eliminar_dono" title="Link to this definition">¶</a></dt>
+<dd><p>Apaga o dono, os seus animais e todos os dados associados (story 16).
+É tudo feito numa só transação: ou apaga tudo, ou não apaga nada.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -121,6 +149,12 @@ animal_id (list): lista com os IDs dos animais.</p>
 </dl>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="db.tabela_existe">
+<span class="sig-prename descclassname"><span class="pre">db.</span></span><span class="sig-name descname"><span class="pre">tabela_existe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ligacao</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nome</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db.tabela_existe" title="Link to this definition">¶</a></dt>
+<dd><p>Devolve True se a tabela indicada existir na base de dados.</p>
 </dd></dl>
 
 <dl class="py function">
