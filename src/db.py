@@ -332,3 +332,47 @@ def criar_tabela_marcacoes():
         )
         """
     )
+
+
+# ---------- Eliminação de dados (stories 16 e 17) ----------
+
+def tabela_existe(ligacao, nome):
+    """Devolve True se a tabela indicada existir na base de dados."""
+    return ligacao.execute(
+        "SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = ?", (nome,)
+    ).fetchone() is not None
+
+
+def apagar_dados_animais(ligacao, ids_animais):
+    """
+    Apaga os animais indicados e tudo o que depende deles
+    (doenças, consultas, vacinas, medicamentos e marcações).
+
+    Não faz commit: deve ser chamada dentro de um `with ligacao:`,
+    para que ou se apaga tudo, ou não se apaga nada.
+
+    Parâmetros:
+        ligacao (sqlite3.Connection): ligação aberta à base de dados.
+        ids_animais (list[int]): IDs dos animais a apagar.
+    """
+    ids = list(ids_animais)
+    if not ids:
+        return
+    marcadores = ",".join("?" for _ in ids)
+
+    if tabela_existe(ligacao, "doencas") and tabela_existe(ligacao, "consultas"):
+        ligacao.execute(
+            f"DELETE FROM doencas WHERE consulta_id IN "
+            f"(SELECT id FROM consultas WHERE animal_id IN ({marcadores}))",
+            ids,
+        )
+    for tabela, coluna in (
+        ("consultas", "animal_id"),
+        ("vacinas", "animal_id"),
+        ("marcacoes", "animal_id"),
+        ("medicamentos", "id_animal"),
+        ("animais", "id"),
+    ):
+        if tabela_existe(ligacao, tabela):
+            ligacao.execute(
+                f"DELETE FROM {tabela} WHERE {coluna} IN ({marcadores})", ids)
