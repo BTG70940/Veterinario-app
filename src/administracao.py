@@ -185,6 +185,63 @@ def menu_fornecedores():
         else:
             print("Opção inválida.")
 
+# ---------- Médicos e colaboradores (story 18) ----------
+
+FUNCOES = (db.FUNCAO_MEDICO, "Enfermeiro", "Auxiliar", "Rececionista", "Outro")
+
+
+def _pedir_funcao(atual=None):
+    """
+    Mostra a lista de funções e pede uma ao utilizador.
+
+    Parâmetros:
+        atual (str | None): função atual; se for dada, deixar vazio mantém-na.
+
+    Retorna:
+        str: a função escolhida.
+    """
+    for i, funcao in enumerate(FUNCOES, start=1):
+        print(f"  {i}. {funcao}")
+    while True:
+        sufixo = f" [{atual}]" if atual else ""
+        valor = input(f"Função{sufixo}: ").strip()
+        if not valor and atual:
+            return atual
+        if valor.isdigit() and 1 <= int(valor) <= len(FUNCOES):
+            return FUNCOES[int(valor) - 1]
+        print("Escolhe um número da lista.")
+
+
+def listar_colaboradores():
+    """Mostra os colaboradores e devolve a lista (vazia se não houver)."""
+    linhas = db.consultar("SELECT * FROM colaboradores ORDER BY funcao, nome")
+    if not linhas:
+        print("Ainda não há colaboradores registados.")
+        return []
+    for c in linhas:
+        especialidade = f" ({c['especialidade']})" if c["especialidade"] else ""
+        print(
+            f"[{c['id']}] {c['nome']} | {c['funcao']}{especialidade} | "
+            f"{c['contacto'] or '—'} | {c['email'] or '—'}"
+        )
+    return linhas
+
+
+def registar_colaborador():
+    """Pede os dados e regista um novo médico ou colaborador."""
+    print("\n--- Novo colaborador ---")
+    nome = animais.pedir_texto("Nome: ")
+    funcao = _pedir_funcao()
+    especialidade = animais.pedir_texto(
+        "Especialidade (opcional): ", obrigatorio=False) or None
+    contacto = animais.pedir_texto("Contacto (opcional): ", obrigatorio=False) or None
+    email = animais.pedir_texto("Email (opcional): ", obrigatorio=False) or None
+    id_c = db.executar(
+        "INSERT INTO colaboradores (nome, funcao, especialidade, contacto, email) "
+        "VALUES (?, ?, ?, ?, ?)",
+        (nome, funcao, especialidade, contacto, email),
+    )
+    print(f"Colaborador registado com o id {id_c}.")
 
 # ---------- Produtos ----------
 
