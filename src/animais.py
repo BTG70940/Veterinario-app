@@ -16,6 +16,15 @@ FICHEIRO_JSON = "animais.json"  # usado apenas para importar dados antigos
 # ---------- Base de dados ----------
 
 def ligar():
+    """Abre uma ligação à base de dados SQLite.
+    
+    Configura o acesso às colunas por nome e ativa a verificação de chaves
+    estrangeiras.
+    
+    Returns:
+        sqlite3.Connection: Ligação aberta à base de dados definida em
+            ``BASE_DADOS``.
+    """
     conn = sqlite3.connect(BASE_DADOS)
     conn.row_factory = sqlite3.Row  # permite aceder às colunas por nome
     conn.execute("PRAGMA foreign_keys = ON")
@@ -23,6 +32,18 @@ def ligar():
 
 
 def criar_tabelas(conn):
+    """Cria as tabelas da aplicação caso ainda não existam.
+    
+    Cria as tabelas ``donos``, ``animais`` e ``consultas``, incluindo as
+    chaves estrangeiras e as restrições definidas no esquema.
+    
+    Args:
+        conn (sqlite3.Connection): Ligação à base de dados onde as tabelas
+            serão criadas.
+    
+    Returns:
+        None
+    """
     with conn:
         conn.executescript("""
             CREATE TABLE IF NOT EXISTS donos (
@@ -171,6 +192,18 @@ def pedir_data(mensagem):
 
 
 def pedir_peso(mensagem):
+    """Pede um peso positivo em quilogramas.
+    
+    Aceita vírgula ou ponto como separador decimal. Repete a pergunta se
+    o valor não for numérico ou não for positivo; uma resposta vazia é
+    aceite.
+    
+    Args:
+        mensagem (str): Texto apresentado ao utilizador.
+    
+    Returns:
+        float | None: Peso introduzido ou ``None`` se o campo ficar vazio.
+    """
     while True:
         valor = input(mensagem).strip().replace(",", ".")
         if not valor:
@@ -271,6 +304,8 @@ def obter_vacinas(conn, animal_id):
 # ---------- Funcionalidades ----------
 
 def registar_animal(conn):
+    """Pede os dados do animal e do dono e guarda o animal"""
+    
     print("\n--- Novo animal ---")
     nome = pedir_texto("Nome: ")
     especie = pedir_texto("Espécie (cão, gato...): ")
@@ -296,6 +331,7 @@ def registar_animal(conn):
 
 
 def listar_animais(conn):
+    """Mostra todos os animais registados com o nome do dono."""
     print("\n--- Todos os animais ---")
     linhas = conn.execute(CONSULTA_FICHA + " ORDER BY a.id").fetchall()
     if not linhas:
@@ -306,6 +342,8 @@ def listar_animais(conn):
 
 
 def pesquisar_animais(conn):
+    """Pesquisa animais pelo nome do animal ou dono"""
+    
     termo = pedir_texto("Pesquisar por nome do animal ou do dono: ")
     padrao = f"%{termo}%"
     linhas = conn.execute(
@@ -339,6 +377,8 @@ def registar_doenca(conn, consulta_id):
 
 
 def registar_consulta(conn):
+    """Regista uma consulta de um animal e, se existir, a doença identificada."""
+    
     print("\n--- Nova consulta ---")
 
     animal = escolher_animal(conn)
@@ -389,6 +429,7 @@ def registar_consulta(conn):
 
 
 def registar_vacina(conn):
+    """Regista uma vacina administrada a um animal."""
     print("\n--- Registar vacina ---")
     animal = escolher_animal(conn)
     if not animal:
@@ -737,6 +778,7 @@ def eliminar_animal(conn, dono_id):
 
 
 def menu(dono_id=None):
+    """Mostra o menu de animais e encaminha para cada funcionalidade. rodape: Desenha o rodapé de cada página do PDF."""
     conn = ligar()
     criar_tabelas(conn)
     atualizar_esquema(conn)
