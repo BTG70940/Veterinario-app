@@ -243,6 +243,50 @@ def registar_colaborador():
     )
     print(f"Colaborador registado com o id {id_c}.")
 
+
+def atualizar_colaborador():
+    """
+    Altera as informações de um médico ou colaborador (story 18).
+    Deixar um campo em branco mantém o valor atual.
+    """
+    if not listar_colaboradores():
+        return
+    id_c = _pedir_id("Id do colaborador a atualizar: ")
+    linhas = db.consultar("SELECT * FROM colaboradores WHERE id = ?", (id_c,)) if id_c else []
+    if not linhas:
+        print("Colaborador não encontrado.")
+        return
+    c = linhas[0]
+    print("Deixa em branco para manter o valor atual.")
+    nome = input(f"Nome [{c['nome']}]: ").strip() or c["nome"]
+    funcao = _pedir_funcao(c["funcao"])
+    especialidade = input(
+        f"Especialidade [{c['especialidade'] or '—'}]: ").strip() or c["especialidade"]
+    contacto = input(f"Contacto [{c['contacto'] or '—'}]: ").strip() or c["contacto"]
+    email = input(f"Email [{c['email'] or '—'}]: ").strip() or c["email"]
+    db.executar(
+        "UPDATE colaboradores SET nome = ?, funcao = ?, especialidade = ?, "
+        "contacto = ?, email = ? WHERE id = ?",
+        (nome, funcao, especialidade, contacto, email, c["id"]),
+    )
+    print("Colaborador atualizado.")
+
+
+def eliminar_colaborador():
+    """Elimina um colaborador, depois de pedir confirmação."""
+    if not listar_colaboradores():
+        return
+    id_c = _pedir_id("Id do colaborador a eliminar: ")
+    linhas = db.consultar("SELECT * FROM colaboradores WHERE id = ?", (id_c,)) if id_c else []
+    if not linhas:
+        print("Colaborador não encontrado.")
+        return
+    if input(f"Eliminar '{linhas[0]['nome']}'? (s/n): ").strip().lower() != "s":
+        print("Cancelado.")
+        return
+    db.executar("DELETE FROM colaboradores WHERE id = ?", (id_c,))
+    print("Colaborador eliminado.")
+
 # ---------- Produtos ----------
 
 def _pedir_fornecedor(atual=None):
