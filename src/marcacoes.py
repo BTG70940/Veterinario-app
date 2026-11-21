@@ -132,3 +132,62 @@ def marcar_consulta(dono_id):
         f"Consulta marcada (n.º {id_marcacao}) para o {animal['nome']} "
         f"em {quando.strftime(FORMATO_ECRA)}."
     )
+
+
+def _obter_marcacoes(dono_id, so_futuras_ativas=False):
+    """
+    Devolve as marcações dos animais do dono, ordenadas por data.
+
+    Parâmetros:
+        dono_id (int): ID do dono autenticado.
+        so_futuras_ativas (bool): se True, só devolve as futuras ainda não canceladas.
+    """
+    sql = """
+        SELECT m.id, m.data_hora, m.motivo, m.estado,
+               a.nome AS animal_nome, c.nome AS medico_nome
+        FROM marcacoes m
+        JOIN animais a ON a.id = m.animal_id
+        LEFT JOIN colaboradores c ON c.id = m.colaborador_id
+        WHERE a.dono_id = ?
+    """
+    parametros = [dono_id]
+    if so_futuras_ativas:
+        sql += " AND m.estado = 'marcada' AND m.data_hora > ?"
+        parametros.append(datetime.now().strftime(FORMATO_BD))
+    sql += " ORDER BY m.data_hora"
+    return db.consultar(sql, parametros)
+
+
+def _mostrar(marcacoes):
+    """Mostra uma lista de marcações, uma por linha."""
+    for m in marcacoes:
+        quando = datetime.strptime(m["data_hora"], FORMATO_BD).strftime(FORMATO_ECRA)
+        print(
+            f"  [{m['id']}] {quando} | {m['animal_nome']} | {m['motivo']} | "
+            f"médico: {m['medico_nome'] or 'sem preferência'} | {m['estado']}"
+        )
+
+
+def listar_marcacoes(dono_id):
+    """Mostra todas as marcações dos animais do dono."""
+    marcacoes = _obter_marcacoes(dono_id)
+    if not marcacoes:
+        print("Não tens consultas marcadas.")
+        return
+    print("\nAs tuas marcações:")
+    _mostrar(marcacoes)
+
+
+def cancelar_marcacao(dono_id):
+    """Cancela uma marcação futura de um animal do dono (não a apaga)."""
+    marcacoes = _obter_marcacoes(dono_id, so_futuras_ativas=True)
+    if not marcacoes:
+        print("Não tens consultas futuras para cancelar.")
+        return
+    _mostrar(marcacoes)
+    valor = input("Id da marcação a cancelar: ").strip()
+    if not any(valor.isdigit() and m["id"] == int(valor) for m in marcacoes):
+        print("Marcação não encontrada.")
+        return
+    db.executar("UPDATE marcacoes SET estado = 'cancelada' WHERE id = ?", (int(valor),))
+    print("Marcação cancelada.")
