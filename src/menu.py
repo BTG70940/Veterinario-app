@@ -2,6 +2,7 @@
 import donos
 import animais
 import administracao
+import marcacoes
 from db import obter_animais_a_tomar_medicacao
 from historicos import menu
 
@@ -55,7 +56,7 @@ def menu_principal(USER_LOGADO):
         elif opcao == "2":
             animais.menu()  # stories 3, 5, 6
         elif opcao == "3":
-            print("Em construção...")  # story 9
+            marcacoes.menu_marcacoes(USER_LOGADO)  # story 9
         elif opcao == "4":
             menu.menu_historicos(USER_LOGADO)  # stories 10, 11
         elif opcao == "5":
