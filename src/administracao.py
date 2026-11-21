@@ -287,6 +287,31 @@ def eliminar_colaborador():
     db.executar("DELETE FROM colaboradores WHERE id = ?", (id_c,))
     print("Colaborador eliminado.")
 
+
+def menu_colaboradores():
+    """Submenu de gestão de médicos e colaboradores."""
+    while True:
+        print("\n--- Médicos e colaboradores ---")
+        print("1. Registar colaborador")
+        print("2. Listar colaboradores")
+        print("3. Atualizar colaborador")
+        print("4. Eliminar colaborador")
+        print("0. Voltar")
+        opcao = input("Escolhe uma opção: ").strip()
+
+        if opcao == "1":
+            registar_colaborador()
+        elif opcao == "2":
+            listar_colaboradores()
+        elif opcao == "3":
+            atualizar_colaborador()
+        elif opcao == "4":
+            eliminar_colaborador()
+        elif opcao == "0":
+            break
+        else:
+            print("Opção inválida.")
+
 # ---------- Produtos ----------
 
 def _pedir_fornecedor(atual=None):
@@ -423,6 +448,7 @@ def menu_administracao():
         print("4. Listar todos os donos")
         print("5. Gerir fornecedores")
         print("6. Gerir produtos")
+        print("7. Gerir médicos e colaboradores")
         print("0. Voltar")
         opcao = input("Escolhe uma opção: ").strip()
 
@@ -438,6 +464,8 @@ def menu_administracao():
             menu_fornecedores()
         elif opcao == "6":
             menu_produtos()
+        elif opcao == "7":
+            menu_colaboradores()
         elif opcao == "0":
             break
         else:
