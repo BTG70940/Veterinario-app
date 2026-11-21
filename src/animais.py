@@ -269,6 +269,8 @@ def listar_animais(conn):
  
  
 def pesquisar_animais(conn):
+    """Pesquisa animais pelo nome do animal ou dono"""
+    
     termo = pedir_texto("Pesquisar por nome do animal ou do dono: ")
     padrao = f"%{termo}%"
     linhas = conn.execute(
