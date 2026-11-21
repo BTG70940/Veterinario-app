@@ -54,7 +54,7 @@ def menu_principal(USER_LOGADO):
         if opcao == "1":
             donos.menu_donos()  # story 2
         elif opcao == "2":
-            animais.menu()  # stories 3, 5, 6
+            animais.menu(USER_LOGADO)  # stories 3, 5, 6, 17  
         elif opcao == "3":
             marcacoes.menu_marcacoes(USER_LOGADO)  # story 9
         elif opcao == "4":
