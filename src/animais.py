@@ -1,4 +1,4 @@
-import json
+import jsondatetime
 import os
 import re
 import sqlite3
@@ -227,6 +227,7 @@ def formatar_data(iso):
 
 
 def calcular_idade(data_nascimento):
+    """ Devolve a idade do animal em anos e meses a partir da data de nascimento. """
     if not data_nascimento:
         return "—"
     nasc = date.fromisoformat(data_nascimento)
