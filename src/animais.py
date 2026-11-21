@@ -258,6 +258,7 @@ def registar_animal(conn):
  
  
 def listar_animais(conn):
+    """Mostra todos os animais registados com o nome do dono."""
     print("\n--- Todos os animais ---")
     linhas = conn.execute(CONSULTA_FICHA + " ORDER BY a.id").fetchall()
     if not linhas:
