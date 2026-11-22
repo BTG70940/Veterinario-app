@@ -93,3 +93,68 @@ def registar_pagamento():
         (int(escolha), valor, date.today().isoformat(), metodo),
     )
     print("Pagamento registado.")
+
+
+def listar_pagamentos():
+    """Mostra todos os pagamentos registados, do mais recente para o mais antigo."""
+    linhas = db.consultar(
+        """
+        SELECT p.id, p.data, p.valor, p.metodo, a.nome AS animal, d.nome AS dono
+        FROM pagamentos p
+        JOIN consultas c ON c.id = p.consulta_id
+        JOIN animais a ON a.id = c.animal_id
+        JOIN donos d ON d.id = a.dono_id
+        ORDER BY p.data DESC, p.id DESC
+        """
+    )
+    if not linhas:
+        print("Ainda não há pagamentos registados.")
+        return
+    for p in linhas:
+        print(
+            f"[{p['id']}] {_formatar_data(p['data'])} | {p['animal']} "
+            f"(dono: {p['dono']}) | {p['valor']:.2f} € | {p['metodo']}"
+        )
+
+
+def resumo_pagamentos():
+    """Mostra o número de pagamentos e o total recebido em cada mês."""
+    linhas = db.consultar(
+        """
+        SELECT strftime('%Y-%m', data) AS mes, COUNT(*) AS n, SUM(valor) AS total
+        FROM pagamentos
+        GROUP BY mes
+        ORDER BY mes DESC
+        """
+    )
+    if not linhas:
+        print("Ainda não há pagamentos registados.")
+        return
+    total_geral = 0
+    for l in linhas:
+        print(f"{l['mes']} | {l['n']} pagamento(s) | {l['total']:.2f} €")
+        total_geral += l["total"]
+    print(f"Total geral: {total_geral:.2f} €")
+
+
+def menu_pagamentos():
+    """Submenu de gestão de pagamentos."""
+    criar_tabela_pagamentos()
+    while True:
+        print("\n--- Pagamentos ---")
+        print("1. Registar pagamento")
+        print("2. Listar pagamentos")
+        print("3. Resumo por mês")
+        print("0. Voltar")
+        opcao = input("Escolhe uma opção: ").strip()
+
+        if opcao == "1":
+            registar_pagamento()
+        elif opcao == "2":
+            listar_pagamentos()
+        elif opcao == "3":
+            resumo_pagamentos()
+        elif opcao == "0":
+            break
+        else:
+            print("Opção inválida.")
