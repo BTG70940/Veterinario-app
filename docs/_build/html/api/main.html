@@ -40,12 +40,36 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="main.main">
 <span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#main.main" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Cria as tabelas, faz o login ou registo e abre o menu principal.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="main.menu_autenticacao">
 <span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">menu_autenticacao</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#main.menu_autenticacao" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Apresenta o menu de autenticação e permite ao utilizador iniciar sessão,
+registar-se na aplicação ou sair do programa.</p>
+<p>Disponibiliza três opções:</p>
+<ul class="simple">
+<li><p>Login: solicita o nome do utilizador e verifica se este existe
+na base de dados. Caso exista, obtém o respetivo identificador
+e inicia a sessão.</p></li>
+<li><p>Registar: permite adicionar um novo dono através da função
+<code class="docutils literal notranslate"><span class="pre">adicionar_dono()</span></code>.</p></li>
+<li><p>Sair: termina a execução do programa.</p></li>
+</ul>
+<p>O identificador do utilizador autenticado é guardado na variável
+global <code class="docutils literal notranslate"><span class="pre">USER_LOGADO</span></code>. O menu permanece em execução até que
+o utilizador consiga iniciar sessão, se registe ou saia da aplicação.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Retorno<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Não devolve nenhum valor. Atualiza a variável global
+<code class="docutils literal notranslate"><span class="pre">USER_LOGADO</span></code> com o identificador do utilizador autenticado.</p>
+</dd>
+<dt class="field-even">Tipo de retorno<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 

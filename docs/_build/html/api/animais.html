@@ -51,7 +51,8 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="animais.calcular_idade">
 <span class="sig-prename descclassname"><span class="pre">animais.</span></span><span class="sig-name descname"><span class="pre">calcular_idade</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_nascimento</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#animais.calcular_idade" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Devolve a idade do animal em anos e meses a partir da data de nascimento</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="animais.consultar_situacao">
@@ -62,7 +63,19 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="animais.criar_tabelas">
 <span class="sig-prename descclassname"><span class="pre">animais.</span></span><span class="sig-name descname"><span class="pre">criar_tabelas</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#animais.criar_tabelas" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Cria as tabelas da aplicação caso ainda não existam.</p>
+<p>Cria as tabelas <code class="docutils literal notranslate"><span class="pre">donos</span></code>, <code class="docutils literal notranslate"><span class="pre">animais</span></code> e <code class="docutils literal notranslate"><span class="pre">consultas</span></code>, incluindo as
+chaves estrangeiras e as restrições definidas no esquema.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>conn (sqlite3.Connection): Ligação à base de dados onde as tabelas</dt><dd><p>serão criadas.</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>None</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="animais.eliminar_animal">
@@ -99,17 +112,29 @@ oferece-se para importar os registos.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="animais.ligar">
 <span class="sig-prename descclassname"><span class="pre">animais.</span></span><span class="sig-name descname"><span class="pre">ligar</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#animais.ligar" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Abre uma ligação à base de dados SQLite.</p>
+<p>Configura o acesso às colunas por nome e ativa a verificação de chaves
+estrangeiras.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><dl class="simple">
+<dt>sqlite3.Connection: Ligação aberta à base de dados definida em</dt><dd><p><code class="docutils literal notranslate"><span class="pre">BASE_DADOS</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="animais.listar_animais">
 <span class="sig-prename descclassname"><span class="pre">animais.</span></span><span class="sig-name descname"><span class="pre">listar_animais</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#animais.listar_animais" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Mostra todos os animais registados com o nome do dono.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="animais.menu">
 <span class="sig-prename descclassname"><span class="pre">animais.</span></span><span class="sig-name descname"><span class="pre">menu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dono_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#animais.menu" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Mostra o menu de animais e encaminha para cada funcionalidade. rodape: Desenha o rodapé de cada página do PDF.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="animais.nome_ficheiro_seguro">
@@ -144,7 +169,17 @@ oferece-se para importar os registos.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="animais.pedir_peso">
 <span class="sig-prename descclassname"><span class="pre">animais.</span></span><span class="sig-name descname"><span class="pre">pedir_peso</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mensagem</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#animais.pedir_peso" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Pede um peso positivo em quilogramas.</p>
+<p>Aceita vírgula ou ponto como separador decimal. Repete a pergunta se
+o valor não for numérico ou não for positivo; uma resposta vazia é
+aceite.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>mensagem (str): Texto apresentado ao utilizador.</p>
+</dd>
+<dt>Returns:</dt><dd><p>float | None: Peso introduzido ou <code class="docutils literal notranslate"><span class="pre">None</span></code> se o campo ficar vazio.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="animais.pedir_texto">
@@ -154,17 +189,20 @@ oferece-se para importar os registos.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="animais.pesquisar_animais">
 <span class="sig-prename descclassname"><span class="pre">animais.</span></span><span class="sig-name descname"><span class="pre">pesquisar_animais</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#animais.pesquisar_animais" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Pesquisa animais pelo nome do animal ou dono</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="animais.registar_animal">
 <span class="sig-prename descclassname"><span class="pre">animais.</span></span><span class="sig-name descname"><span class="pre">registar_animal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#animais.registar_animal" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Pede os dados do animal e do dono e guarda o animal</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="animais.registar_consulta">
 <span class="sig-prename descclassname"><span class="pre">animais.</span></span><span class="sig-name descname"><span class="pre">registar_consulta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#animais.registar_consulta" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Regista uma consulta de um animal e, se existir, a doença identificada.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="animais.registar_doenca">
@@ -175,7 +213,8 @@ oferece-se para importar os registos.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="animais.registar_vacina">
 <span class="sig-prename descclassname"><span class="pre">animais.</span></span><span class="sig-name descname"><span class="pre">registar_vacina</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#animais.registar_vacina" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Regista uma vacina administrada a um animal.</p>
+</dd></dl>
 
 </section>
 
