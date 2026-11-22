@@ -29,6 +29,7 @@ Estrutura do código
 * ``animais.py``: animais, consultas, vacinas e exportação de fichas em PDF.
 * ``administracao.py``: área de administração, protegida por palavra-passe.
 * ``marcacoes.py``: marcação, listagem e cancelamento de consultas.
+* ``marcacoes.py``: marcação, listagem e cancelamento de consultas.
 * ``historicos/``: histórico de doenças e de medicamentos.
 
 .. toctree::

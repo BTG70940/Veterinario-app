@@ -44,13 +44,52 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="historicos.historicos.mostrar_historico_doencas">
 <span class="sig-prename descclassname"><span class="pre">historicos.historicos.</span></span><span class="sig-name descname"><span class="pre">mostrar_historico_doencas</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">USER_LOGADO</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#historicos.historicos.mostrar_historico_doencas" title="Link to this definition">¶</a></dt>
-<dd><p>Mostra o histórico de doenças dos animais do dono autenticado.</p>
+<dd><p>Apresenta o histórico de doenças dos animais pertencentes ao dono autenticado.</p>
+<p>Obtém os identificadores dos animais associados ao utilizador
+autenticado e consulta as respetivas doenças registadas na base
+de dados. As doenças são agrupadas por animal e apresentadas
+no ecrã, incluindo o nome, a descrição, a data do diagnóstico
+e o identificador da consulta associada.</p>
+<p>Caso o utilizador não tenha animais registados ou não existam
+doenças associadas aos seus animais, apresenta uma mensagem
+informativa.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parâmetros<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>USER_LOGADO</strong> (<em>int</em>) – Identificador do utilizador atualmente autenticado.</p>
+</dd>
+<dt class="field-even">Retorno<span class="colon">:</span></dt>
+<dd class="field-even"><p>Não devolve nenhum valor. Apresenta o histórico de doenças
+dos animais no terminal.</p>
+</dd>
+<dt class="field-odd">Tipo de retorno<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="historicos.historicos.mostrar_medicamentos">
 <span class="sig-prename descclassname"><span class="pre">historicos.historicos.</span></span><span class="sig-name descname"><span class="pre">mostrar_medicamentos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">USER_LOGADO</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#historicos.historicos.mostrar_medicamentos" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Apresenta os medicamentos associados aos animais do dono autenticado.</p>
+<p>Obtém os identificadores dos animais pertencentes ao utilizador
+autenticado e consulta os respetivos medicamentos na base de dados.
+Os medicamentos são agrupados por animal e apresentados no ecrã,
+incluindo o nome do medicamento e a respetiva quantidade.</p>
+<p>Caso o utilizador não tenha animais registados ou nenhum dos seus
+animais esteja a tomar medicação, apresenta uma mensagem informativa.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parâmetros<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>USER_LOGADO</strong> (<em>int</em>) – Identificador do utilizador atualmente autenticado.</p>
+</dd>
+<dt class="field-even">Retorno<span class="colon">:</span></dt>
+<dd class="field-even"><p>Não devolve nenhum valor. Apresenta os medicamentos
+dos animais no terminal.</p>
+</dd>
+<dt class="field-odd">Tipo de retorno<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 <section id="module-historicos.menu">
@@ -58,7 +97,24 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="historicos.menu.menu_historicos">
 <span class="sig-prename descclassname"><span class="pre">historicos.menu.</span></span><span class="sig-name descname"><span class="pre">menu_historicos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">USER_LOGADO</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#historicos.menu.menu_historicos" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Apresenta o menu de consulta dos históricos do utilizador
+e encaminha para a área selecionada.</p>
+<p>Permite ao utilizador consultar o histórico de medicamentos
+ou o histórico de doenças. O menu permanece em execução até
+o utilizador selecionar a opção de voltar.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parâmetros<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>USER_LOGADO</strong> (<em>int</em>) – Identificador do utilizador atualmente autenticado.</p>
+</dd>
+<dt class="field-even">Retorno<span class="colon">:</span></dt>
+<dd class="field-even"><p>Não devolve nenhum valor. Apresenta o menu e executa
+a funcionalidade correspondente à opção selecionada.</p>
+</dd>
+<dt class="field-odd">Tipo de retorno<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 <section id="module-historicos">

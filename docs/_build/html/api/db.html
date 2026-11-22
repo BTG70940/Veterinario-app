@@ -127,12 +127,48 @@ id_animal, nome_animal e data.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="db.obter_id_animais_por_dono">
 <span class="sig-prename descclassname"><span class="pre">db.</span></span><span class="sig-name descname"><span class="pre">obter_id_animais_por_dono</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dono</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db.obter_id_animais_por_dono" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Obtém a lista de identificadores dos animais pertencentes a um determinado dono.</p>
+<p>Executa uma consulta à base de dados para obter os IDs dos animais
+associados ao dono indicado.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parâmetros<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dono</strong> (<em>int</em>) – Identificador do dono cujos animais se pretende consultar.</p>
+</dd>
+<dt class="field-even">Retorno<span class="colon">:</span></dt>
+<dd class="field-even"><p>Lista de identificadores dos animais pertencentes ao dono.
+Caso não existam animais associados, devolve uma lista vazia.</p>
+</dd>
+<dt class="field-odd">Tipo de retorno<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[int]</p>
+</dd>
+<dt class="field-even">Levanta<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>sqlite3.Error</strong> – Se ocorrer um erro durante a consulta à base de dados.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="db.obter_id_dono">
 <span class="sig-prename descclassname"><span class="pre">db.</span></span><span class="sig-name descname"><span class="pre">obter_id_dono</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nome</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db.obter_id_dono" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Obtém o identificador de um dono através do seu nome.</p>
+<p>Executa uma consulta à base de dados para procurar o dono
+com o nome indicado. Caso exista, devolve o seu identificador.
+Se não encontrar nenhum registo correspondente, devolve None.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parâmetros<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nome</strong> (<em>str</em>) – Nome do dono que se pretende procurar.</p>
+</dd>
+<dt class="field-even">Retorno<span class="colon">:</span></dt>
+<dd class="field-even"><p>Identificador do dono, caso exista, ou None se não for encontrado.</p>
+</dd>
+<dt class="field-odd">Tipo de retorno<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int | None</p>
+</dd>
+<dt class="field-even">Levanta<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>sqlite3.Error</strong> – Se ocorrer um erro durante a consulta à base de dados.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="db.obter_medicamentos_por_animal">
@@ -160,7 +196,25 @@ animal_id (list): lista com os IDs dos animais.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="db.utilizador_existe">
 <span class="sig-prename descclassname"><span class="pre">db.</span></span><span class="sig-name descname"><span class="pre">utilizador_existe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nome</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#db.utilizador_existe" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Verifica se existe um dono com o nome indicado na base de dados.</p>
+<p>Executa uma consulta à tabela <code class="docutils literal notranslate"><span class="pre">donos</span></code> para verificar se existe
+algum registo cujo nome corresponda ao valor fornecido.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parâmetros<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nome</strong> (<em>str</em>) – Nome do dono que se pretende procurar.</p>
+</dd>
+<dt class="field-even">Retorno<span class="colon">:</span></dt>
+<dd class="field-even"><p>True se existir um dono com o nome indicado,
+ou False caso contrário.</p>
+</dd>
+<dt class="field-odd">Tipo de retorno<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+<dt class="field-even">Levanta<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>sqlite3.Error</strong> – Se ocorrer um erro durante a consulta à base de dados.</p>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 
