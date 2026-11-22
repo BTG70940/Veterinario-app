@@ -1,6 +1,20 @@
 from .historicos import mostrar_medicamentos, mostrar_historico_doencas
 
 def menu_historicos(USER_LOGADO):
+    """
+    Apresenta o menu de consulta dos históricos do utilizador
+    e encaminha para a área selecionada.
+
+    Permite ao utilizador consultar o histórico de medicamentos
+    ou o histórico de doenças. O menu permanece em execução até
+    o utilizador selecionar a opção de voltar.
+
+    :param USER_LOGADO: Identificador do utilizador atualmente autenticado.
+    :type USER_LOGADO: int
+    :return: Não devolve nenhum valor. Apresenta o menu e executa
+             a funcionalidade correspondente à opção selecionada.
+    :rtype: None
+    """
     while True:
         print("\n=== Menu de Historicos ===")
         print("1. Medicamentos")

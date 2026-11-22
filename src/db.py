@@ -108,6 +108,19 @@ def consultar(sql, parametros=()):
         ligacao.close()
 
 def utilizador_existe(nome):
+    """
+    Verifica se existe um dono com o nome indicado na base de dados.
+
+    Executa uma consulta à tabela ``donos`` para verificar se existe
+    algum registo cujo nome corresponda ao valor fornecido.
+
+    :param nome: Nome do dono que se pretende procurar.
+    :type nome: str
+    :return: True se existir um dono com o nome indicado,
+             ou False caso contrário.
+    :rtype: bool
+    :raises sqlite3.Error: Se ocorrer um erro durante a consulta à base de dados.
+    """
     conn = ligar()
     try:
         cursor = conn.cursor()
@@ -120,6 +133,19 @@ def utilizador_existe(nome):
         conn.close()
 
 def obter_id_dono(nome):
+    """
+    Obtém o identificador de um dono através do seu nome.
+
+    Executa uma consulta à base de dados para procurar o dono
+    com o nome indicado. Caso exista, devolve o seu identificador.
+    Se não encontrar nenhum registo correspondente, devolve None.
+
+    :param nome: Nome do dono que se pretende procurar.
+    :type nome: str
+    :return: Identificador do dono, caso exista, ou None se não for encontrado.
+    :rtype: int | None
+    :raises sqlite3.Error: Se ocorrer um erro durante a consulta à base de dados.
+    """
     conn = sqlite3.connect(CAMINHO_BD)
     try:
         cursor = conn.cursor()
@@ -134,6 +160,19 @@ def obter_id_dono(nome):
 
 
 def obter_id_animais_por_dono(dono):
+    """
+    Obtém a lista de identificadores dos animais pertencentes a um determinado dono.
+
+    Executa uma consulta à base de dados para obter os IDs dos animais
+    associados ao dono indicado.
+
+    :param dono: Identificador do dono cujos animais se pretende consultar.
+    :type dono: int
+    :return: Lista de identificadores dos animais pertencentes ao dono.
+             Caso não existam animais associados, devolve uma lista vazia.
+    :rtype: list[int]
+    :raises sqlite3.Error: Se ocorrer um erro durante a consulta à base de dados.
+    """
     conn = sqlite3.connect(CAMINHO_BD)
     try:
         cursor = conn.cursor()

@@ -2,6 +2,23 @@ import sqlite3
 from db import obter_id_animais_por_dono, obter_medicamentos_por_animal, obter_doencas_por_animal
 
 def mostrar_medicamentos(USER_LOGADO):
+    """
+    Apresenta os medicamentos associados aos animais do dono autenticado.
+
+    Obtém os identificadores dos animais pertencentes ao utilizador
+    autenticado e consulta os respetivos medicamentos na base de dados.
+    Os medicamentos são agrupados por animal e apresentados no ecrã,
+    incluindo o nome do medicamento e a respetiva quantidade.
+
+    Caso o utilizador não tenha animais registados ou nenhum dos seus
+    animais esteja a tomar medicação, apresenta uma mensagem informativa.
+
+    :param USER_LOGADO: Identificador do utilizador atualmente autenticado.
+    :type USER_LOGADO: int
+    :return: Não devolve nenhum valor. Apresenta os medicamentos
+             dos animais no terminal.
+    :rtype: None
+    """
     # Obter o ID do animal associado ao dono logado
     animal_id = obter_id_animais_por_dono(USER_LOGADO)
     if not animal_id:
@@ -41,7 +58,25 @@ def mostrar_medicamentos(USER_LOGADO):
 
 
 def mostrar_historico_doencas(USER_LOGADO):
-    """Mostra o histórico de doenças dos animais do dono autenticado."""
+    """
+    Apresenta o histórico de doenças dos animais pertencentes ao dono autenticado.
+
+    Obtém os identificadores dos animais associados ao utilizador
+    autenticado e consulta as respetivas doenças registadas na base
+    de dados. As doenças são agrupadas por animal e apresentadas
+    no ecrã, incluindo o nome, a descrição, a data do diagnóstico
+    e o identificador da consulta associada.
+
+    Caso o utilizador não tenha animais registados ou não existam
+    doenças associadas aos seus animais, apresenta uma mensagem
+    informativa.
+
+    :param USER_LOGADO: Identificador do utilizador atualmente autenticado.
+    :type USER_LOGADO: int
+    :return: Não devolve nenhum valor. Apresenta o histórico de doenças
+             dos animais no terminal.
+    :rtype: None
+    """
 
     animal_id = obter_id_animais_por_dono(USER_LOGADO)
 
