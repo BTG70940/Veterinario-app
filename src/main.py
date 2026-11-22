@@ -6,6 +6,27 @@ from donos import adicionar_dono
 USER_LOGADO = 0
 
 def menu_autenticacao():
+    """
+    Apresenta o menu de autenticação e permite ao utilizador iniciar sessão,
+    registar-se na aplicação ou sair do programa.
+
+    Disponibiliza três opções:
+
+    - Login: solicita o nome do utilizador e verifica se este existe
+      na base de dados. Caso exista, obtém o respetivo identificador
+      e inicia a sessão.
+    - Registar: permite adicionar um novo dono através da função
+      ``adicionar_dono()``.
+    - Sair: termina a execução do programa.
+
+    O identificador do utilizador autenticado é guardado na variável
+    global ``USER_LOGADO``. O menu permanece em execução até que
+    o utilizador consiga iniciar sessão, se registe ou saia da aplicação.
+
+    :return: Não devolve nenhum valor. Atualiza a variável global
+             ``USER_LOGADO`` com o identificador do utilizador autenticado.
+    :rtype: None
+    """
     global USER_LOGADO
     while True:
         print("\n=== Autenticação ===")
