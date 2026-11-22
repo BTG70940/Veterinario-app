@@ -7,6 +7,7 @@ import sqlite3
 import animais
 import db
 import donos
+import pagamentos
 
 
 def criar_tabelas_admin():
@@ -449,6 +450,7 @@ def menu_administracao():
         print("5. Gerir fornecedores")
         print("6. Gerir produtos")
         print("7. Gerir médicos e colaboradores")
+        print("8. Gerir pagamentos")
         print("0. Voltar")
         opcao = input("Escolhe uma opção: ").strip()
 
@@ -466,6 +468,8 @@ def menu_administracao():
             menu_produtos()
         elif opcao == "7":
             menu_colaboradores()
+        elif opcao == "8":
+            pagamentos.menu_pagamentos()
         elif opcao == "0":
             break
         else:
